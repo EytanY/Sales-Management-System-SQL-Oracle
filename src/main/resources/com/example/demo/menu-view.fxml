@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.demo.MenuController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Text text="Menu" />
+    <Button text="Customers" fx:id="customersButton" onMouseClicked="#onCostumersButtonClick"/>
+    <Button text="Items" fx:id="itemsButton" onAction="#onItemsButtonClick"/>
+    <Button text="Warehouse And Stock" fx:id="warehouseButton" onAction="#onWarehouseButtonClick"/>
+    <Button text="Orders" fx:id="ordersButton" onAction="#onOrdersButtonClick"/>
+    <Button text="Deliveries" fx:id="deliveriesButton" onAction="#onDeliveriesButtonClick"/>
+    <Button text="Cancel Invoice" onAction="#onRemoveButtonClick"/>
+    <Button text="Return Product" onAction="#onRemoveButtonClick"/>
+    <Button text="Report Of Open Orders" fx:id="openOrdersButton" onAction="#onAllOpenOrdersButtonClick"/>
+    <Button text="Report Of Available Products" fx:id="availableProductsButton" onAction="#onAvailableProductsButtonClick"/>
+    <Button text="Report Of Sales For Costumer" fx:id="customerOrderButton" onAction="#onCustomerOrdersButtonClick"/>
+    <Button text="Report Of Orders in date" fx:id="searchOrderByDateButton" onAction="#onSearchOrdersByDateButtonClick"/>
+
+</VBox>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="5.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.demo.OrdersController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <Text text="New Order:"/>
+    <Text text="Costumer ID:"/>
+    <TextField fx:id="customerIDTF"/>
+    <Button text="Add New Order" onAction="#onAddNewOrderButtonClick"/>
+    <Text text="Add item to order:"/>
+    <Text text="Enter Order ID"/>
+    <TextField fx:id="orderIDTF"/>
+    <Text text="Enter item ID:"/>
+    <TextField fx:id="itemIDTF"/>
+    <Text text="Enter Amount"/>
+    <TextField fx:id="amountTF"/>
+    <Button text="Add item to Order" onAction="#onAddNewItemToOrderButtonClick"/>
+    <Text text="Search Order"/>
+    <TextField fx:id="searchOrderIDTF"/>
+    <Button text="Search Order" onAction="#onSearchOrderButtonClick"/>
+    <Button text="Show All Orders" onAction="#onShowAllOrdersButtonClick"/>
+    <ScrollPane minHeight="120" minWidth="150" maxHeight="120" maxWidth="350">
+        <Label fx:id="resultLabel"/>
+    </ScrollPane>
+
+    <Button text="Menu" fx:id="menuButton" onAction="#onReturnToMenuButtonClick"/>
+</VBox>

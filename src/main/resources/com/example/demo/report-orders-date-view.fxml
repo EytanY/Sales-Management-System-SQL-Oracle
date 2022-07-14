@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.demo.ReportOrdersDateController"
+      spacing="5.0">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <Text text="Search All Orders by Date:"/>
+    <Text text="Enter Date:"/>
+    <DatePicker fx:id="dateOrders"/>
+    <Button text="Search Orders" onAction="#onSearchOrdersByDateButtonClick"/>
+    <Button text="Search Deliveries" onAction="#onSearchDeliveriesByDateButtonClick"/>
+    <Text text="Result:"/>
+    <ScrollPane minWidth="300" minHeight="400" maxHeight="400">
+        <Label fx:id="resultLabel"/>
+    </ScrollPane>
+    <Button text="Return to Menu" onAction="#onReturnToMenuButtonClick" fx:id="menuButton"/>
+</VBox>
