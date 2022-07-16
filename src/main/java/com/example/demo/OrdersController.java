@@ -45,7 +45,19 @@ public class OrdersController extends Controller{
             searchStatement.setInt(1, Integer.parseInt(itemIDTF.getText()));
             searchStatement.setInt(2, Integer.parseInt(orderIDTF.getText()));
             ResultSet searchResultSet = searchStatement.executeQuery();
+
+            String statusSql  = "SELECT get_status_of_order_by_id(?) FROM DUAL";
+            PreparedStatement statusSteStatement = connection.prepareStatement(statusSql);
+            statusSteStatement.setInt(1, Integer.parseInt(orderIDTF.getText()));
+            ResultSet resultSet = statusSteStatement.executeQuery();
+            resultSet.next();
+
+            if(resultSet.getInt(1) == 0){
+                resultLabel.setText("Order's Status Closed.");
+                return;
+            }
             if(searchResultSet.next()){
+
                 String updateSQL = "UPDATE items_in_orders SET amount = amount + ? WHERE order_id = ? AND item_id = ?";
                 PreparedStatement updateStatement = connection.prepareStatement(updateSQL);
                 updateStatement.setInt(1, Integer.parseInt(amountTF.getText()));

@@ -36,7 +36,7 @@ public class ItemsController extends Controller {
             statement.close();
             connection.close();
         }catch (Exception exception){
-            resultLabel.setText("NOT SUCCESSES");
+            resultLabel.setText("NOT SUCCESSES- check the input(ID already used,price not a number...)");
         }
     }
     public void onSearchItemButtonClick(ActionEvent actionEvent) {

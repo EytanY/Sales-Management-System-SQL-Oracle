@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -101,6 +102,10 @@ public class DeliveriesController extends Controller implements Initializable {
                 statement.setInt(3, amount);
                 statement.executeUpdate();
             }
+            String sql = "EXEC update_order_status(?)";
+            CallableStatement myCall = connection.prepareCall("{call update_order_status(?)}");
+            myCall.setInt(1, deliveryID);
+            myCall.executeUpdate();
             resultLabel.setText("SUCCESS");
         }catch (Exception exception){
             resultLabel.setText("Error!");

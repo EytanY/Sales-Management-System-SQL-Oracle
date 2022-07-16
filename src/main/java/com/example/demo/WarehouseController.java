@@ -1,15 +1,20 @@
 package com.example.demo;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class WarehouseController extends Controller {
+public class WarehouseController extends Controller implements Initializable {
     
     public TextField warehouseNameTF;
     public Button addNewWarehouseButton;
@@ -22,11 +27,13 @@ public class WarehouseController extends Controller {
     public Button searchProductButton;
     public TextField amountTF;
     public TextField warehouseIDTF;
+    public ChoiceBox<String> productIDChoice;
+    public ChoiceBox<String> warehouseIDChoice;
 
     public void onAddNewWarehouseButtonClick(ActionEvent actionEvent) {
         try{
             Connection connection = new SQL().getConnection();
-            String sql = "INSERT INTO WAREHOUSES(warehouses_name)VALUES(?)";
+            String sql = String.format("INSERT INTO %s(%s)VALUES(?)", WAREHOUSE_TABLE, WAREHOUSE_NAME);
             PreparedStatement statement = connection.prepareStatement(sql);
             String warehouseName = warehouseNameTF.getText();
             if(validSyntax(warehouseName))
@@ -50,14 +57,14 @@ public class WarehouseController extends Controller {
         if(validSyntax(warehouseName)){
             try{
                 Connection connection = new SQL().getConnection();
-                String sql = "SELECT * FROM WAREHOUSES WHERE warehouses_name = ? ";
+                String sql = String.format("SELECT * FROM %s WHERE %s = ? ", WAREHOUSE_TABLE, WAREHOUSE_NAME);
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, warehouseName);
                 ResultSet rs = statement.executeQuery();
                 StringBuilder sb = new StringBuilder();
                 while (rs.next()){
-                    sb.append("Warehouse ID:").append(rs.getString("warehouses_id"));
-                    sb.append(" ,Warehouse's Name:").append(rs.getString("warehouses_name")).append("\n");
+                    sb.append("Warehouse ID:").append(rs.getString(WAREHOUSE_ID));
+                    sb.append(" ,Warehouse's Name:").append(rs.getString(WAREHOUSE_NAME)).append("\n");
                 }
                 resultLabel.setText(sb.toString());
                 if(sb.toString().equals(""))
@@ -79,13 +86,13 @@ public class WarehouseController extends Controller {
     public void onShowAllWarehousesButtonClick(ActionEvent actionEvent) {
         try{
             Connection connection = new SQL().getConnection();
-            String sql = "SELECT * FROM WAREHOUSES";
+            String sql = String.format("SELECT * FROM %s", WAREHOUSE_TABLE);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (rs.next()){
-                sb.append("Warehouse ID:").append(rs.getString("warehouses_id"));
-                sb.append(" ,Warehouse's Name:").append(rs.getString("warehouses_name")).append("\n");
+                sb.append("Warehouse ID:").append(rs.getString(WAREHOUSE_ID));
+                sb.append(" ,Warehouse's Name:").append(rs.getString(WAREHOUSE_NAME)).append("\n");
             }
             resultLabel.setText(sb.toString());
             if(sb.toString().equals(""))
@@ -103,18 +110,19 @@ public class WarehouseController extends Controller {
     public void onShowStockButtonClick(ActionEvent actionEvent) {
         try{
             Connection connection = new SQL().getConnection();
-            String sql = "SELECT  items.item_id, items.price ,NVL(sum(amount), 0) as amount " +
-                    "FROM items LEFT  JOIN stock " +
-                    "ON stock.item_id = items.item_id " +
-                    "GROUP BY items.item_id, items.price " +
-                    "ORDER BY amount DESC";
+            String sql = String.format("SELECT  %s.%s, %s.%s ,NVL(sum(%s), 0) as amount " +
+                                       "FROM %s LEFT  JOIN %s " +
+                                        "ON %s.%s = %s.%s " +
+                                        "GROUP BY %s.%s, %s.%s " +
+                                        "ORDER BY amount DESC" , ITEM_TABLE, ITEM_ID, ITEM_TABLE,ITEM_PRICE, STOCK_AMOUNT,
+                    ITEM_TABLE, STOCK_TABLE, STOCK_TABLE , STOCK_ITEM_ID, ITEM_TABLE, ITEM_ID,ITEM_TABLE, ITEM_ID, ITEM_TABLE, ITEM_PRICE);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (rs.next()){
-                sb.append("Item ID:").append(rs.getInt("item_id"));
-                sb.append(" ,Price:").append(rs.getFloat("price"));
-                sb.append(" ,Total Amount:").append(rs.getInt("amount")).append("\n");
+                sb.append("Item ID:").append(rs.getInt(ITEM_ID));
+                sb.append(" ,Price:").append(rs.getFloat(ITEM_PRICE));
+                sb.append(" ,Total Amount:").append(rs.getInt(STOCK_AMOUNT)).append("\n");
             }
             if(sb.toString().equals("")){
                 resultLabel.setText("Empty");
@@ -129,28 +137,49 @@ public class WarehouseController extends Controller {
 
     public void onAddAmountOfProductsToStockButtonClick(ActionEvent actionEvent) {
         try{
-
+            int amount = Integer.parseInt(amountTF.getText());
+            if(amount < 1){
+                resultLabel.setText("Amount can not be negative");
+                return;
+            }
             Connection connection = new SQL().getConnection();
-            String sqlCheck = "INSERT INTO stock(warehouse_id, item_id, amount) " +
-                    "SELECT ?, ? , 0" +
-                    "  FROM dual " +
-                    " WHERE NOT EXISTS (SELECT NULL  FROM stock  WHERE warehouse_id = ? AND  item_id = ?)" ;
+            String sqlCheck = String.format("INSERT INTO %s(%s, %s, %s) " +
+                                        "SELECT ?, ? , 0 " +
+                                        "  FROM DUAL " +
+                                       " WHERE NOT EXISTS (SELECT NULL  FROM %s  WHERE  %s = ? AND  %s = ?)",
+                    STOCK_TABLE, STOCK_WAREHOUSE_ID, STOCK_ITEM_ID, STOCK_AMOUNT, STOCK_TABLE, STOCK_WAREHOUSE_ID, STOCK_ITEM_ID) ;
             PreparedStatement checkItemInStockStatement = connection.prepareStatement(sqlCheck);
-            checkItemInStockStatement.setInt(1, Integer.parseInt(warehouseIDTF.getText()));
-            checkItemInStockStatement.setInt(2, Integer.parseInt(productIDTF.getText()));
-            checkItemInStockStatement.setInt(3, Integer.parseInt(warehouseIDTF.getText()));
-            checkItemInStockStatement.setInt(4, Integer.parseInt(productIDTF.getText()));
+            int warehouseID = Integer.parseInt(warehouseIDChoice.getValue());
+            int productID = Integer.parseInt(productIDChoice.getValue());
+            checkItemInStockStatement.setInt(1, warehouseID);
+            checkItemInStockStatement.setInt(2, productID);
+            checkItemInStockStatement.setInt(3, warehouseID);
+            checkItemInStockStatement.setInt(4, productID);
             checkItemInStockStatement.executeUpdate();
 
-            String sql = "UPDATE stock SET amount = amount + ? WHERE warehouse_id = ? AND item_id = ?";
+            String sql = String.format("UPDATE %s SET %s = %s + ? WHERE %s = ? AND %s = ?"
+                    ,STOCK_TABLE, STOCK_AMOUNT,STOCK_AMOUNT ,STOCK_WAREHOUSE_ID, STOCK_ITEM_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, Integer.parseInt(amountTF.getText()));
-            statement.setInt(2, Integer.parseInt(warehouseIDTF.getText()));
-            statement.setInt(3, Integer.parseInt(productIDTF.getText()));
+            statement.setInt(1, amount);
+            statement.setInt(2, warehouseID);
+            statement.setInt(3,productID);
             statement.executeUpdate();
             resultLabel.setText("SUCCESSES");
         }catch (Exception exception){
             resultLabel.setText("Error!");
         }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        ArrayList<String> itemsIDStr = getColFromTable(ITEM_ID, ITEM_TABLE);
+        productIDChoice.getItems().addAll(itemsIDStr);
+        if(itemsIDStr.size() > 0)
+            productIDChoice.setValue(itemsIDStr.get(0));
+
+        ArrayList<String> warehouseIDStr = getColFromTable(WAREHOUSE_ID, WAREHOUSE_TABLE);
+        warehouseIDChoice.getItems().addAll(warehouseIDStr);
+        if(warehouseIDStr.size() > 0)
+            warehouseIDChoice.setValue(warehouseIDStr.get(0));
     }
 }

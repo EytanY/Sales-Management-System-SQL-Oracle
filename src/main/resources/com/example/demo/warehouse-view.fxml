@@ -23,10 +23,10 @@
     <Button text="Search Warehouse" fx:id="searchWarehouseButton" onAction="#onSearchWarehouseButtonClick"/>
     <Button text="Show All Warehouses" onAction="#onShowAllWarehousesButtonClick" fx:id="showAllWarehousesButton"/>
     <Text text="Stock"/>
-    <Text text="Enter Warehouse ID:"/>
-    <TextField fx:id="warehouseIDTF"/>
-    <Text text="Enter Product ID:"/>
-    <TextField fx:id="productIDTF"/>
+    <Text text="Choose Warehouse ID:"/>
+    <ChoiceBox fx:id="warehouseIDChoice"/>
+    <Text text="Choose Product ID:"/>
+    <ChoiceBox fx:id="productIDChoice"/>
     <Text text="Enter Amount:"/>
     <TextField fx:id="amountTF"/>
     <Button text="Add Amount Of Product To Stock" onAction="#onAddAmountOfProductsToStockButtonClick" fx:id="searchProductButton"/>

@@ -19,13 +19,13 @@
     <Button text="Add New Customer" onAction="#onAddNewCustomerButtonClick"  fx:id="addNewCustomerButton"/>
     <Button text="Search Costumer" onAction="#onSearchCostumerButtonClick" fx:id="searchCostumerButton"/>
     <Button text="Show All Costumers" onAction="#onShowAllCostumersButtonClick" fx:id="showAllCostumersButton"/>
-    <ScrollPane minViewportWidth="200" minHeight="150">
+    <ScrollPane minViewportWidth="200" minHeight="300" maxHeight="300">
         <Label fx:id="resultLabel"/>
     </ScrollPane>
-    <Text text="Remove Costumer:"/>
-    <Text text="Enter Costumer ID:"/>
-    <TextField fx:id="costumerID"/>
-    <Button text="Remove Costumer" onAction="#onRemoveCostumerButtonClick" fx:id="removeCostumerButton"/>
-    <Label fx:id="removeLabel"/>
+<!--    <Text text="Remove Costumer:"/>-->
+<!--    <Text text="Enter Costumer ID:"/>-->
+<!--    <TextField fx:id="costumerID"/>-->
+<!--    <Button text="Remove Costumer" onAction="#onRemoveCostumerButtonClick" fx:id="removeCostumerButton"/>-->
+<!--    <Label fx:id="removeLabel"/>-->
     <Button text="Return to Menu" onAction="#onReturnToMenuButtonClick" fx:id="menuButton"/>
 </VBox>
