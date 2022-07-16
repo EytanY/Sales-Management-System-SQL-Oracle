@@ -12,18 +12,35 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public abstract class Controller {
-
+    //Item attributes
     public final String ITEM_TABLE = "ITEMS";
     public final String ITEM_ID = "ITEM_ID";
     public final String ITEM_PRICE = "PRICE";
+    //Warehouse attributes
     public final String WAREHOUSE_TABLE = "WAREHOUSES";
     public final String WAREHOUSE_ID = "WAREHOUSES_ID";
     public final String WAREHOUSE_NAME = "WAREHOUSES_NAME";
-
+    //Stock attributes
     public final String STOCK_TABLE = "STOCK";
     public final String STOCK_ITEM_ID = "ITEM_ID";
     public final String STOCK_AMOUNT = "AMOUNT";
     public final String STOCK_WAREHOUSE_ID = "WAREHOUSE_ID";
+    //Order attributes
+    public final String ORDER_TABLE = "ORDERS";
+    public final String ORDER_ID = "ORDER_ID";
+    public final String ORDER_CUSTOMER_ID = "COSTUMER_ID";
+    public final String ORDER_DATE = "ORDER_DATE";
+    public final String ORDER_STATUS = "STATUS";
+    //Customer attributes
+    public final String CUSTOMER_TABLE = "CUSTOMERS";
+    public final String CUSTOMER_ID = "CUSTOMER_ID";
+    public final String CUSTOMER_FIRST_NAME = "FIRST_NAME";
+    public final String CUSTOMER_LAST_NAME = "LAST_NAME";
+    // Items In Order attributes
+    public final String ITEMS_IN_ORDERS_TABLE = "ITEMS_IN_ORDERS";
+    public final String ITEMS_IN_ORDERS_ORDER_ID = "ORDER_ID";
+    public final String ITEMS_IN_ORDERS_ITEM_ID = "ITEM_ID";
+    public final String ITEMS_IN_ORDERS_AMOUNT = "AMOUNT";
     @FXML
     private Button menuButton;
 
@@ -55,6 +72,8 @@ public abstract class Controller {
             while (resultSet.next()){
                 arrayList.add(resultSet.getInt(colName) + "");
             }
+            connection.close();
+            statement.close();
             return arrayList;
         }catch (Exception exception){
             return null;

@@ -11,14 +11,14 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
     <Text text="New Order:"/>
-    <Text text="Costumer ID:"/>
-    <TextField fx:id="customerIDTF"/>
+    <Text text="Choose Costumer ID:"/>
+    <ChoiceBox fx:id="customersIDChoice"/>
     <Button text="Add New Order" onAction="#onAddNewOrderButtonClick"/>
     <Text text="Add item to order:"/>
-    <Text text="Enter Order ID"/>
-    <TextField fx:id="orderIDTF"/>
-    <Text text="Enter item ID:"/>
-    <TextField fx:id="itemIDTF"/>
+    <Text text="Choose Order ID"/>
+    <ChoiceBox fx:id="orderIDChoice"/>
+    <Text text="Choose item ID:"/>
+    <ChoiceBox fx:id="itemIDChoice"/>
     <Text text="Enter Amount"/>
     <TextField fx:id="amountTF"/>
     <Button text="Add item to Order" onAction="#onAddNewItemToOrderButtonClick"/>

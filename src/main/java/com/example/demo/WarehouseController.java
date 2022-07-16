@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import javafx.event.ActionEvent;
+
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -23,14 +23,25 @@ public class WarehouseController extends Controller implements Initializable {
     public Button showAllWarehousesButton;
     public Label resultLabel;
     public Button showStockButton;
-    public TextField productIDTF;
     public Button searchProductButton;
     public TextField amountTF;
-    public TextField warehouseIDTF;
     public ChoiceBox<String> productIDChoice;
     public ChoiceBox<String> warehouseIDChoice;
 
-    public void onAddNewWarehouseButtonClick(ActionEvent actionEvent) {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        ArrayList<String> itemsIDStr = getColFromTable(ITEM_ID, ITEM_TABLE);
+        productIDChoice.getItems().addAll(itemsIDStr);
+        if(itemsIDStr.size() > 0)
+            productIDChoice.setValue(itemsIDStr.get(0));
+
+        ArrayList<String> warehouseIDStr = getColFromTable(WAREHOUSE_ID, WAREHOUSE_TABLE);
+        warehouseIDChoice.getItems().addAll(warehouseIDStr);
+        if(warehouseIDStr.size() > 0)
+            warehouseIDChoice.setValue(warehouseIDStr.get(0));
+    }
+
+    public void onAddNewWarehouseButtonClick() {
         try{
             Connection connection = new SQL().getConnection();
             String sql = String.format("INSERT INTO %s(%s)VALUES(?)", WAREHOUSE_TABLE, WAREHOUSE_NAME);
@@ -51,7 +62,7 @@ public class WarehouseController extends Controller implements Initializable {
         }
     }
 
-    public void onSearchWarehouseButtonClick(ActionEvent actionEvent) {
+    public void onSearchWarehouseButtonClick() {
         String warehouseName = searchWarehouseTF.getText();
 
         if(validSyntax(warehouseName)){
@@ -83,7 +94,7 @@ public class WarehouseController extends Controller implements Initializable {
         }
     }
 
-    public void onShowAllWarehousesButtonClick(ActionEvent actionEvent) {
+    public void onShowAllWarehousesButtonClick() {
         try{
             Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT * FROM %s", WAREHOUSE_TABLE);
@@ -107,7 +118,7 @@ public class WarehouseController extends Controller implements Initializable {
         }
     }
 
-    public void onShowStockButtonClick(ActionEvent actionEvent) {
+    public void onShowStockButtonClick() {
         try{
             Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT  %s.%s, %s.%s ,NVL(sum(%s), 0) as amount " +
@@ -135,7 +146,7 @@ public class WarehouseController extends Controller implements Initializable {
         }
     }
 
-    public void onAddAmountOfProductsToStockButtonClick(ActionEvent actionEvent) {
+    public void onAddAmountOfProductsToStockButtonClick() {
         try{
             int amount = Integer.parseInt(amountTF.getText());
             if(amount < 1){
@@ -170,16 +181,4 @@ public class WarehouseController extends Controller implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        ArrayList<String> itemsIDStr = getColFromTable(ITEM_ID, ITEM_TABLE);
-        productIDChoice.getItems().addAll(itemsIDStr);
-        if(itemsIDStr.size() > 0)
-            productIDChoice.setValue(itemsIDStr.get(0));
-
-        ArrayList<String> warehouseIDStr = getColFromTable(WAREHOUSE_ID, WAREHOUSE_TABLE);
-        warehouseIDChoice.getItems().addAll(warehouseIDStr);
-        if(warehouseIDStr.size() > 0)
-            warehouseIDChoice.setValue(warehouseIDStr.get(0));
-    }
 }
