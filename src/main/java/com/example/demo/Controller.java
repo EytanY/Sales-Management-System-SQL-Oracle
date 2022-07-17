@@ -53,6 +53,9 @@ public abstract class Controller {
     public final String ITEMS_IN_DELIVERY_ITEM_ID = "ITEM_ID";
     public final String ITEMS_IN_DELIVERY_DELIVERY_ID = "DELIVERY_ID";
     public final String ITEMS_IN_DELIVERY_AMOUNT = "AMOUNT";
+
+    // Functions
+    public final String NUM_OF_ITEMS_TO_SEND_FUNC = "NUM_OF_ITEMS_TO_SEND";
     @FXML
     private Button menuButton;
 
