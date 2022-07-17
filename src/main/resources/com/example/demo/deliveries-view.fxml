@@ -22,20 +22,13 @@
     <TextField fx:id="warehouseIDTF"/>
     <ChoiceBox fx:id= "deliveryTypeCB" />
     <Button text="Add New Delivery:" onAction="#onAddNewDeliveryButtonClick"/>
-    <Text text="Add items to delivery:"/>
     <Text text="Enter Delivery ID:"/>
     <TextField  fx:id="deliveryIDTF"/>
-    <Text text="Enter Item ID:"/>
-    <TextField fx:id="itemIDTF" />
-    <Text text="Enter amount:"/>
-    <TextField fx:id="amountTF"/>
     <Button text="Add item to delivery" onAction="#onAddItemsToDeliveryButtonClick"/>
-    <Text text="Search Delivery:"/>
-    <Text text="Enter Delivery ID:"/>
     <TextField  fx:id="searchDeliveryIDTF"/>
     <Button text="Search Delivery" onAction="#onSearchDeliveryButtonClick"/>
     <Button text="Show All Deliveries" onAction="#onSearchAllDeliveriesButtonClick"/>
-    <ScrollPane minHeight="80" minWidth="150" maxHeight="80" maxWidth="350">
+    <ScrollPane minHeight="200" minWidth="150" maxHeight="200" maxWidth="350">
         <Label fx:id="resultLabel"/>
     </ScrollPane>
 

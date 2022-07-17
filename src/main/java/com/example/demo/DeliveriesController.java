@@ -31,6 +31,8 @@ public class DeliveriesController extends Controller implements Initializable {
         DELIVERY_TYPES.add("B");
         deliveryTypeCB.getItems().addAll(DELIVERY_TYPES);
         deliveryTypeCB.setValue(DELIVERY_TYPES.get(0));
+
+
     }
 
     public void onAddNewDeliveryButtonClick(ActionEvent actionEvent) {
