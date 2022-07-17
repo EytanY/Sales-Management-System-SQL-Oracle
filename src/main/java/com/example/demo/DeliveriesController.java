@@ -38,7 +38,7 @@ public class DeliveriesController extends Controller implements Initializable {
             ordersIDChoice.setValue(orderIDStr.get(0));
 
         ArrayList<String> warehouseIDStr = getColFromTable(WAREHOUSE_ID, WAREHOUSE_TABLE);
-        warehouseIDChoice.getItems().addAll(orderIDStr);
+        warehouseIDChoice.getItems().addAll(warehouseIDStr);
         if(warehouseIDStr.size() > 1)
             warehouseIDChoice.setValue(warehouseIDStr.get(0));
 
@@ -52,6 +52,7 @@ public class DeliveriesController extends Controller implements Initializable {
             Connection connection = new SQL().getConnection();
             String sql = String.format("INSERT INTO %s (%s, %s, %s) VALUES ( ? , ? , ?)",
                     DELIVERY_TABLE, DELIVERY_ORDER_ID, DELIVERY_WAREHOUSE_ID, DELIVERY_TYPE);
+            System.out.println(sql);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1,orderID);
             statement.setInt(2,warehouseID);
@@ -132,10 +133,12 @@ public class DeliveriesController extends Controller implements Initializable {
     public void onSearchDeliveryButtonClick(ActionEvent actionEvent) {
         try{
             Connection connection = new SQL().getConnection();
-            String sql = "SELECT * " +
-                    "FROM delivery LEFT JOIN items_in_delivery " +
-                    "ON DELIVERY.DELIVERY_ID = ITEMS_IN_DELIVERY.DELIVERY_ID " +
-                    "where delivery.delivery_id = ?";
+            String sql = String.format("SELECT * " +
+                                        "FROM %s LEFT JOIN %s " +
+                                        "ON %s.%s = %s.%s " +
+                                        "where %s.%s = ?",
+                    DELIVERY_TABLE, ITEMS_IN_DELIVERY_TABLE, DELIVERY_TABLE, DELIVERY_ID, ITEMS_IN_DELIVERY_TABLE
+            , ITEMS_IN_DELIVERY_DELIVERY_ID, DELIVERY_TABLE, DELIVERY_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, Integer.parseInt(searchDeliveryIDTF.getText()));
             ResultSet rs = statement.executeQuery();
@@ -143,17 +146,17 @@ public class DeliveriesController extends Controller implements Initializable {
             boolean firstIteration = false;
             while (rs.next()){
                 if(!firstIteration){
-                    sb.append("Delivery ID:").append(rs.getInt("delivery_id"));
-                    sb.append("  Order ID:").append(rs.getInt("order_id"));
-                    sb.append("  Warehouse ID:").append(rs.getInt("warehouses_id")).append("\n");
-                    sb.append("Date:").append(rs.getDate("delivery_date"));
-                    sb.append("  Type:").append(rs.getInt("delivery_type")).append("\n");
+                    sb.append("Delivery ID:").append(rs.getInt(DELIVERY_ID));
+                    sb.append("  Order ID:").append(rs.getInt(DELIVERY_ORDER_ID));
+                    sb.append("  Warehouse ID:").append(rs.getInt(DELIVERY_WAREHOUSE_ID)).append("\n");
+                    sb.append("Date:").append(rs.getDate(DELIVERY_DATE));
+                    sb.append("  Type:").append(rs.getInt(DELIVERY_TYPE)).append("\n");
                     sb.append("Items:").append("\n");
                     firstIteration = true;
                }
 
-                sb.append("Item ID:").append(rs.getInt("item_id"));
-                sb.append("  Amount:").append(rs.getInt("amount")).append("\n");
+                sb.append("Item ID:").append(rs.getInt(ITEMS_IN_DELIVERY_ITEM_ID));
+                sb.append("  Amount:").append(rs.getInt(ITEMS_IN_DELIVERY_AMOUNT)).append("\n");
 
 
             }
@@ -167,16 +170,17 @@ public class DeliveriesController extends Controller implements Initializable {
     public void onSearchAllDeliveriesButtonClick(ActionEvent actionEvent) {
         try{
             Connection connection = new SQL().getConnection();
-            String sql = "SELECT * FROM delivery ";
+            String sql = String.format("SELECT * FROM %s",
+                    DELIVERY_TABLE);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (rs.next()){
-                sb.append("Delivery ID:").append(rs.getInt("delivery_id"));
-                sb.append("  Order ID:").append(rs.getInt("order_id"));
-                sb.append("  Warehouse ID:").append(rs.getInt("warehouses_id")).append("\n");
-                sb.append("Date:").append(rs.getDate("delivery_date"));
-                sb.append("  Type:").append(rs.getInt("delivery_type")).append("\n\n");
+                sb.append("Delivery ID:").append(rs.getInt(DELIVERY_ID));
+                sb.append("  Order ID:").append(rs.getInt(DELIVERY_ORDER_ID));
+                sb.append("  Warehouse ID:").append(rs.getInt(DELIVERY_WAREHOUSE_ID)).append("\n");
+                sb.append("Date:").append(rs.getDate(DELIVERY_DATE));
+                sb.append("  Type:").append(rs.getInt(DELIVERY_TYPE)).append("\n\n");
             }
             resultLabel.setText(sb.toString());
 

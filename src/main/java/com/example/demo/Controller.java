@@ -47,7 +47,12 @@ public abstract class Controller {
     public final String DELIVERY_WAREHOUSE_ID = "WAREHOUSES_ID";
     public final String DELIVERY_ORDER_ID = "ORDER_ID";
     public final String DELIVERY_TYPE = "DELIVERY_TYPE";
-
+    public final String DELIVERY_DATE = "DELIVERY_DATE";
+    // Items In Delivery attributes
+    public final String ITEMS_IN_DELIVERY_TABLE = "ITEMS_IN_DELIVERY";
+    public final String ITEMS_IN_DELIVERY_ITEM_ID = "ITEM_ID";
+    public final String ITEMS_IN_DELIVERY_DELIVERY_ID = "DELIVERY_ID";
+    public final String ITEMS_IN_DELIVERY_AMOUNT = "AMOUNT";
     @FXML
     private Button menuButton;
 
