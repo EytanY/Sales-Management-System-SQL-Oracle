@@ -12,7 +12,7 @@
     </padding>
     <Text text="New Order:"/>
     <Text text="Choose Costumer ID:"/>
-    <ChoiceBox fx:id="customersIDChoice"/>
+    <ChoiceBox fx:id="customersIDChoice" />
     <Button text="Add New Order" onAction="#onAddNewOrderButtonClick"/>
     <Text text="Add item to order:"/>
     <Text text="Choose Order ID"/>
