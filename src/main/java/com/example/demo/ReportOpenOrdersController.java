@@ -22,20 +22,21 @@ public class ReportOpenOrdersController extends Controller implements Initializa
     public String getAllOpenOrders() {
         try {
             Connection connection = new SQL().getConnection();
-            String sql = "SELECT * " +
-                    "FROM ORDERS, CUSTOMERS " +
-                    "WHERE CUSTOMERS.customer_id = orders.costumer_id AND ORDERS.status = 1 " ;
+            String sql = String.format("SELECT * " +
+                    "FROM %s, %s " +
+                    "WHERE %s.%s = %s.%s AND %s.%s = 1 ",
+                    ORDER_TABLE, CUSTOMER_TABLE, CUSTOMER_TABLE, CUSTOMER_ID, ORDER_TABLE, ORDER_CUSTOMER_ID, ORDER_TABLE, ORDER_STATUS);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             boolean found = false;
             while (rs.next()) {
-                sb.append("Order ID:").append(rs.getInt("order_id"));
-                sb.append("  Date:").append(rs.getDate("order_date"));
-                sb.append("  Status:").append(rs.getInt("status")).append("\n");
-                sb.append("Customer ID:").append(rs.getInt("customer_id"));
-                sb.append("  First Name:").append(rs.getString("first_name"));
-                sb.append("  Last Name:").append(rs.getString("last_name")).append("\n\n");
+                sb.append("Order ID:").append(rs.getInt(ORDER_ID));
+                sb.append("  Date:").append(rs.getDate(ORDER_DATE));
+                sb.append("  Status:").append(rs.getInt(ORDER_STATUS)).append("\n");
+                sb.append("Customer ID:").append(rs.getInt(CUSTOMER_ID));
+                sb.append("  First Name:").append(rs.getString(CUSTOMER_FIRST_NAME));
+                sb.append("  Last Name:").append(rs.getString(CUSTOMER_LAST_NAME)).append("\n\n");
                 found = true;
 
             }

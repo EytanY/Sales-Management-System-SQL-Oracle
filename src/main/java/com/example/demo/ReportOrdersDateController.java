@@ -18,21 +18,23 @@ public class ReportOrdersDateController extends Controller{
     public void onSearchDeliveriesByDateButtonClick(ActionEvent actionEvent) {
         try{
             Connection connection = new SQL().getConnection();
-            String sql = "select * " +
-                    "FROM customers  join orders on orders.costumer_id = customers.customer_id " +
-                    "JOIN delivery ON orders.order_id = delivery.order_id " +
-                    " WHERE ? = TO_DATE(DELIVERY.DELIVERY_DATE)";
+            String sql = String.format("select * " +
+                    "FROM %s  join %s on %s.%s = %s.%s " +
+                    "JOIN %s ON %s.%s = %s.%s " +
+                    " WHERE ? = TO_DATE(%s.%s)"
+            , CUSTOMER_TABLE, ORDER_TABLE, ORDER_TABLE, ORDER_CUSTOMER_ID, CUSTOMER_TABLE, CUSTOMER_ID
+            , DELIVERY_TABLE, ORDER_TABLE, ORDER_ID, DELIVERY_TABLE, DELIVERY_ORDER_ID
+            , DELIVERY_TABLE, DELIVERY_DATE);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setDate(1, Date.valueOf(dateOrders.getValue()));
             ResultSet rs = statement.executeQuery();
-            System.out.println("E");
             StringBuilder sb = new StringBuilder();
             sb.append("Deliveries::\n");
             while(rs.next()){
-                sb.append("Delivery ID:").append(rs.getInt("delivery_id"));
-                sb.append( ",Type:").append(rs.getString("delivery_type")).append(" ").append(rs.getString("last_name"));
-                sb.append(" From Warehouse ID:").append(rs.getInt("warehouses_id"));
-                sb.append(" ,Order ID:").append(rs.getInt("order_id")).append(" ,Status").append(rs.getInt("status")).append("\n");
+                sb.append("Delivery ID:").append(rs.getInt(DELIVERY_ID));
+                sb.append( ",Type:").append(rs.getString(DELIVERY_TYPE)).append(" ").append(rs.getString("last_name"));
+                sb.append(" From Warehouse ID:").append(rs.getInt(DELIVERY_WAREHOUSE_ID));
+                sb.append(" ,Order ID:").append(rs.getInt(DELIVERY_ORDER_ID)).append(" ,Status").append(rs.getInt(ORDER_STATUS)).append("\n");
             }
 
             resultLabel.setText(sb.toString());
@@ -45,18 +47,20 @@ public class ReportOrdersDateController extends Controller{
     public void onSearchOrdersByDateButtonClick(ActionEvent actionEvent) {
         try{
             Connection connection = new SQL().getConnection();
-            String sql = "select * " +
-                    "FROM customers  join orders on orders.costumer_id = customers.customer_id " +
-                    "WHERE ? = TO_DATE(orders.order_date) ";
+            String sql = String.format("select * " +
+                    "FROM %s  join %s on %s.%s = %s.%s " +
+                    "WHERE ? = TO_DATE(%s.%s) ",
+                    CUSTOMER_TABLE, ORDER_TABLE, ORDER_TABLE, ORDER_CUSTOMER_ID, CUSTOMER_TABLE, CUSTOMER_ID,
+                    ORDER_TABLE, ORDER_DATE);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setDate(1, Date.valueOf(dateOrders.getValue()));
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             sb.append("Orders:\n");
             while(rs.next()){
-                sb.append("Customer ID:").append(rs.getInt("costumer_id"));
-                sb.append( ",Name:").append(rs.getString("first_name")).append(" ").append(rs.getString("last_name"));
-                sb.append(" ,Order ID:").append(rs.getInt("order_id")).append(" ,Status").append(rs.getInt("status")).append("\n");
+                sb.append("Customer ID:").append(rs.getInt(ORDER_CUSTOMER_ID));
+                sb.append( ",Name:").append(rs.getString(CUSTOMER_FIRST_NAME)).append(" ").append(rs.getString(CUSTOMER_LAST_NAME));
+                sb.append(" ,Order ID:").append(rs.getInt(ORDER_ID)).append(" ,Status").append(rs.getInt(ORDER_STATUS)).append("\n");
             }
 
             resultLabel.setText(sb.toString());

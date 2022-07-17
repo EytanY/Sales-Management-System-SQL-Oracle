@@ -2,8 +2,6 @@ package com.example.demo;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,21 +24,24 @@ public class ReportProductsController extends Controller implements Initializabl
     public String getAvailableProducts() {
         try {
             Connection connection = new SQL().getConnection();
-            String sql = "SELECT  items.item_id, items.price, items.item_description ,NVL(sum(amount), 0) as amount  " +
-                    "FROM items LEFT  JOIN stock " +
-                    "ON stock.item_id = items.item_id " +
-                    "GROUP BY items.item_id, items.price, items.item_description " +
-                    "HAVING NVL(sum(amount), 0) > 0 "+
-                    "ORDER BY 4 DESC";
+            String sql = String.format("SELECT  %s.%s, %s.%s, %s.%s ,NVL(sum(%s), 0) as %s  " +
+                    "FROM %s LEFT  JOIN %s " +
+                    "ON %s.%s = %s.%s " +
+                    "GROUP BY %s.%s, %s.%s, %s.%s " +
+                    "HAVING NVL(sum(%s), 0) > 0 "+
+                    "ORDER BY 4 DESC",
+                    ITEM_TABLE, ITEM_ID, ITEM_TABLE, ITEM_PRICE, ITEM_TABLE, ITEM_DESCRIPTION, STOCK_AMOUNT, STOCK_AMOUNT,
+                    ITEM_TABLE, STOCK_TABLE, STOCK_TABLE, STOCK_ITEM_ID, ITEM_TABLE, ITEM_ID, ITEM_TABLE, ITEM_ID, ITEM_TABLE, ITEM_PRICE,
+                    ITEM_TABLE, ITEM_DESCRIPTION, STOCK_AMOUNT);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (rs.next()) {
-                sb.append("Item ID:").append(rs.getInt("item_id"));
-                sb.append(" ,Description:").append(rs.getString("item_description"));
-                sb.append(" ,Price:").append(rs.getFloat("price"));
+                sb.append("Item ID:").append(rs.getInt(ITEM_ID));
+                sb.append(" ,Description:").append(rs.getString(ITEM_DESCRIPTION));
+                sb.append(" ,Price:").append(rs.getFloat(ITEM_PRICE));
 
-                sb.append(" ,Total Amount:").append(rs.getInt("amount")).append("\n");
+                sb.append(" ,Total Amount:").append(rs.getInt(STOCK_AMOUNT)).append("\n");
             }
             return sb.toString();
         } catch (Exception e) {
@@ -51,10 +52,13 @@ public class ReportProductsController extends Controller implements Initializabl
     public String getAvailableProductsByWarehouses(){
         try {
             Connection connection = new SQL().getConnection();
-            String sql = "SELECT  * " +
-                    "FROM warehouses LEFT JOIN stock ON stock.warehouse_id = warehouses.warehouses_id " +
-                    "WHERE STOCK.amount > 0 " +
-                    "order by stock.warehouse_id ";
+            String sql = String.format("SELECT  * " +
+                    "FROM %s LEFT JOIN %s ON %s.%s = %s.%s " +
+                    "WHERE %s.%s > 0 " +
+                    "order by %s.%s ",
+                    WAREHOUSE_TABLE, STOCK_TABLE, STOCK_TABLE, STOCK_WAREHOUSE_ID, WAREHOUSE_TABLE, WAREHOUSE_ID,
+                    STOCK_TABLE, STOCK_AMOUNT, STOCK_TABLE, STOCK_WAREHOUSE_ID);
+            System.out.println(sql);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();

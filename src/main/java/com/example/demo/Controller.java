@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public abstract class Controller {
     //Item attributes
     public final String ITEM_TABLE = "ITEMS";
+    public final String ITEM_DESCRIPTION = "ITEM_DESCRIPTION";
     public final String ITEM_ID = "ITEM_ID";
     public final String ITEM_PRICE = "PRICE";
     //Warehouse attributes
