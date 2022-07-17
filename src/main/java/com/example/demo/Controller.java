@@ -57,6 +57,7 @@ public abstract class Controller {
 
     // Functions
     public final String NUM_OF_ITEMS_TO_SEND_FUNC = "NUM_OF_ITEMS_TO_SEND";
+    public final String GET_TOTAL_PRICE_OF_ORDER = "GET_TOTAL_PRICE_OF_ORDER";
     @FXML
     private Button menuButton;
 

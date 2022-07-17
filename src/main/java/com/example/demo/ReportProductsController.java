@@ -58,7 +58,6 @@ public class ReportProductsController extends Controller implements Initializabl
                     "order by %s.%s ",
                     WAREHOUSE_TABLE, STOCK_TABLE, STOCK_TABLE, STOCK_WAREHOUSE_ID, WAREHOUSE_TABLE, WAREHOUSE_ID,
                     STOCK_TABLE, STOCK_AMOUNT, STOCK_TABLE, STOCK_WAREHOUSE_ID);
-            System.out.println(sql);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();

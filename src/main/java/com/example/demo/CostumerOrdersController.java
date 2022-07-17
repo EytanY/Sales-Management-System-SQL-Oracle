@@ -18,9 +18,12 @@ public class CostumerOrdersController extends Controller{
     public void onSearchCustomerButtonClick(ActionEvent actionEvent) {
         try {
             Connection connection = new SQL().getConnection();
-            String sql = "select customers.first_name, customers.last_name, orders.order_date, orders.order_id, orders.status, get_total_price_of_order(orders.order_id) as price  " +
-                    "FROM customers LEFT JOIN orders ON orders.costumer_id = customers.customer_id " +
-                    "WHERE customers.customer_id  = ? ";
+            String sql = String.format("select %s.%s, %s.%s, %s.%s, %s.%s, %s.%s, %s(%s.%s) as price  " +
+                    "FROM %s LEFT JOIN %s ON %s.%s = %s.%s " +
+                    "WHERE %s.%s  = ? ",
+                    CUSTOMER_TABLE, CUSTOMER_FIRST_NAME, CUSTOMER_TABLE, CUSTOMER_LAST_NAME, ORDER_TABLE, ORDER_DATE, ORDER_TABLE, ORDER_ID, ORDER_TABLE, ORDER_STATUS,
+                    GET_TOTAL_PRICE_OF_ORDER, ORDER_TABLE, ORDER_ID, CUSTOMER_TABLE, ORDER_TABLE, ORDER_TABLE, ORDER_CUSTOMER_ID, CUSTOMER_TABLE,
+                    CUSTOMER_ID, CUSTOMER_TABLE, CUSTOMER_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, Integer.parseInt(customerIDTF.getText()));
             ResultSet rs = statement.executeQuery();
@@ -29,14 +32,14 @@ public class CostumerOrdersController extends Controller{
             int orderID = 0;
             while (rs.next()){
                 if(!hasInfo){
-                    sb.append("Customer's Name:").append(rs.getString("first_name")).append(" ").append(rs.getString("last_name")).append("\n\n");
+                    sb.append("Customer's Name:").append(rs.getString(CUSTOMER_FIRST_NAME)).append(" ").append(rs.getString(CUSTOMER_LAST_NAME)).append("\n\n");
                     sb.append("Orders:\n");
                     hasInfo = true;
                 }
-                if(rs.getInt("order_id") != 0){
-                    sb.append("Order ID:").append(rs.getInt("order_id"));
-                    sb.append(" ,Date:").append(rs.getDate("order_date"));
-                    sb.append(" ,Status").append(rs.getInt("status"));
+                if(rs.getInt(ORDER_ID) != 0){
+                    sb.append("Order ID:").append(rs.getInt(ORDER_ID));
+                    sb.append(" ,Date:").append(rs.getDate(ORDER_DATE));
+                    sb.append(" ,Status:").append(rs.getInt(ORDER_STATUS));
                     sb.append(" ,Total Price:").append(rs.getFloat("price")).append("$\n");
                 }
 
