@@ -41,6 +41,13 @@ public abstract class Controller {
     public final String ITEMS_IN_ORDERS_ORDER_ID = "ORDER_ID";
     public final String ITEMS_IN_ORDERS_ITEM_ID = "ITEM_ID";
     public final String ITEMS_IN_ORDERS_AMOUNT = "AMOUNT";
+    //Delivery attributes
+    public final String DELIVERY_TABLE = "DELIVERY";
+    public final String DELIVERY_ID = "DELIVERY_ID";
+    public final String DELIVERY_WAREHOUSE_ID = "WAREHOUSES_ID";
+    public final String DELIVERY_ORDER_ID = "ORDER_ID";
+    public final String DELIVERY_TYPE = "DELIVERY_TYPE";
+
     @FXML
     private Button menuButton;
 

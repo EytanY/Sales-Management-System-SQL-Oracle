@@ -16,10 +16,10 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
     <Text text="New Delivery:"/>
-    <Text text="Enter Order ID:"/>
-    <TextField fx:id="orderIDTF"/>
-    <Text text="Enter Warehouse ID:"/>
-    <TextField fx:id="warehouseIDTF"/>
+    <Text text="Choose Order ID:"/>
+    <ChoiceBox fx:id="ordersIDChoice"/>
+    <Text text="Choose Warehouse ID:"/>
+    <ChoiceBox fx:id="warehouseIDChoice"/>
     <ChoiceBox fx:id= "deliveryTypeCB" />
     <Button text="Add New Delivery:" onAction="#onAddNewDeliveryButtonClick"/>
     <Text text="Enter Delivery ID:"/>

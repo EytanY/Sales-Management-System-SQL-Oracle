@@ -16,14 +16,14 @@ import java.util.ResourceBundle;
 
 public class DeliveriesController extends Controller implements Initializable {
     public ArrayList<String> DELIVERY_TYPES = new ArrayList<>();
-    public TextField orderIDTF;
     public Label resultLabel;
-    public TextField warehouseIDTF;
     public ChoiceBox<String> deliveryTypeCB;
     public TextField deliveryIDTF;
     public TextField itemIDTF;
     public TextField amountTF;
     public TextField searchDeliveryIDTF;
+    public ChoiceBox<String> ordersIDChoice;
+    public ChoiceBox<String> warehouseIDChoice;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -32,26 +32,41 @@ public class DeliveriesController extends Controller implements Initializable {
         deliveryTypeCB.getItems().addAll(DELIVERY_TYPES);
         deliveryTypeCB.setValue(DELIVERY_TYPES.get(0));
 
+        ArrayList<String> orderIDStr = getColFromTable(ORDER_ID, ORDER_TABLE);
+        ordersIDChoice.getItems().addAll(orderIDStr);
+        if(orderIDStr.size() > 1)
+            ordersIDChoice.setValue(orderIDStr.get(0));
+
+        ArrayList<String> warehouseIDStr = getColFromTable(WAREHOUSE_ID, WAREHOUSE_TABLE);
+        warehouseIDChoice.getItems().addAll(orderIDStr);
+        if(warehouseIDStr.size() > 1)
+            warehouseIDChoice.setValue(warehouseIDStr.get(0));
+
 
     }
 
-    public void onAddNewDeliveryButtonClick(ActionEvent actionEvent) {
+    public void onAddNewDeliveryButtonClick() {
         try {
+            int orderID = Integer.parseInt(ordersIDChoice.getValue());
+            int warehouseID = Integer.parseInt(warehouseIDChoice.getValue());
             Connection connection = new SQL().getConnection();
-            String sql = "INSERT INTO DELIVERY (order_id, warehouses_id, delivery_type) VALUES ( ? , ? , ?)";
+            String sql = String.format("INSERT INTO %s (%s, %s, %s) VALUES ( ? , ? , ?)",
+                    DELIVERY_TABLE, DELIVERY_ORDER_ID, DELIVERY_WAREHOUSE_ID, DELIVERY_TYPE);
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, Integer.parseInt(orderIDTF.getText()));
-            statement.setInt(2, Integer.parseInt(warehouseIDTF.getText()));
+            statement.setInt(1,orderID);
+            statement.setInt(2,warehouseID);
             statement.setInt(3, DELIVERY_TYPES.indexOf(deliveryTypeCB.getValue()));
             statement.executeUpdate();
+            statement.close();
 
-            String sql1 = "SELECT max(delivery_id) from DELIVERY";
+            String sql1 = String.format("SELECT max(%s) %s from %s"
+            , DELIVERY_ID, DELIVERY_ID, DELIVERY_TABLE);
             PreparedStatement statement1 = connection.prepareStatement(sql1);
             ResultSet rs =  statement1.executeQuery();
             rs.next();
-            resultLabel.setText("SUCCESS! New Delivery ID:" + rs.getInt("max(delivery_id)"));
+            resultLabel.setText("SUCCESS! New Delivery ID:" + rs.getInt(DELIVERY_ID));
             connection.close();
-
+            statement1.close();
         }catch (Exception exception){
             resultLabel.setText("Error!");
         }
