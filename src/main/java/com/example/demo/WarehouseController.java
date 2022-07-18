@@ -2,10 +2,7 @@ package com.example.demo;
 
 
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -47,15 +44,21 @@ public class WarehouseController extends Controller implements Initializable {
             String sql = String.format("INSERT INTO %s(%s)VALUES(?)", WAREHOUSE_TABLE, WAREHOUSE_NAME);
             PreparedStatement statement = connection.prepareStatement(sql);
             String warehouseName = warehouseNameTF.getText();
-            if(validSyntax(warehouseName))
-            {
-                statement.setString(1, warehouseName);
-                statement.executeUpdate();
-                resultLabel.setText("SUCCESSES");
-            }
-            else {
-                resultLabel.setText("Invalid Syntax!");
-            }
+            statement.setString(1, warehouseName);
+            statement.executeUpdate();
+            statement.close();
+            String sql1 = String.format("SELECT max(%s) from %s", WAREHOUSE_ID, WAREHOUSE_TABLE);
+            PreparedStatement statement1 = connection.prepareStatement(sql1);
+            ResultSet rs =  statement1.executeQuery();
+            rs.next();
+            Alert message = new Alert(Alert.AlertType.INFORMATION);
+            String messageStr = "SUCCESS! New Warehouse ID:" + rs.getInt(String.format("max(%s)", WAREHOUSE_ID));
+            message.setContentText(messageStr);
+            message.show();
+            onReturnToMenuButtonClick();
+
+            statement1.close();
+            connection.close();
 
         }catch (Exception exception){
             resultLabel.setText("ERROR!");

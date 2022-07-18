@@ -68,9 +68,13 @@ public class OrdersController extends Controller implements Initializable {
             int order_id = Integer.parseInt(orderIDChoice.getValue());
             int item_id = Integer.parseInt(itemIDChoice.getValue());
             int amount = Integer.parseInt(amountTF.getText());
-
-            if(amount < 1){
+            int maxAmount = getTotalAmountItem(item_id);
+            if(amount < 1 ) {
                 resultLabel.setText("Amount can not be negative!");
+                return;
+            }
+            else if (amount > maxAmount){
+                resultLabel.setText("Amount is too high! Total Amount in Stock is " + maxAmount);
                 return;
             }
             Connection connection = new SQL().getConnection();

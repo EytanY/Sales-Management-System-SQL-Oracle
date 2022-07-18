@@ -58,6 +58,7 @@ public abstract class Controller {
     // Functions
     public final String NUM_OF_ITEMS_TO_SEND_FUNC = "NUM_OF_ITEMS_TO_SEND";
     public final String GET_TOTAL_PRICE_OF_ORDER = "GET_TOTAL_PRICE_OF_ORDER";
+    public final String ITEM_TOTAL_AMOUNT_FUNC = "ITEM_TOTAL_AMOUNT";
     @FXML
     private Button menuButton;
 
@@ -96,5 +97,22 @@ public abstract class Controller {
             return null;
         }
 
+    }
+
+    public int getTotalAmountItem(int itemID){
+        try {
+            Connection connection = new SQL().getConnection();
+            String sql = String.format("SELECT %s(?) FROM DUAL", ITEM_TOTAL_AMOUNT_FUNC);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, itemID);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            int amount = resultSet.getInt(1);
+            connection.close();
+            statement.close();
+            return amount;
+        }catch (Exception exception){
+            return 0;
+        }
     }
 }
