@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 public class OrdersController extends Controller implements Initializable {
     public TextField amountTF;
     public Label resultLabel;
-    public TextField searchOrderIDTF;
+    public TextField orderIDTF;
     public ChoiceBox<String> customersIDChoice;
     public ChoiceBox<String> itemIDChoice;
     public ChoiceBox<String> orderIDChoice;
@@ -128,7 +128,7 @@ public class OrdersController extends Controller implements Initializable {
                     ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_ORDER_ID, ORDER_TABLE, ORDER_ID,
                     ORDER_TABLE, ORDER_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, Integer.parseInt(searchOrderIDTF.getText()));
+            statement.setInt(1, Integer.parseInt(orderIDTF.getText()));
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             boolean found = false;
@@ -189,4 +189,20 @@ public class OrdersController extends Controller implements Initializable {
         }
     }
 
+    public void closeOrderStatusButtonClick() {
+        try {
+            int orderID = Integer.parseInt(orderIDTF.getText());
+            Connection connection = new SQL().getConnection();
+            String sql = String.format("UPDATE %s SET %s = 0 WHERE %s =  ?", ORDER_TABLE,
+                    ORDER_STATUS, ORDER_ID);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, orderID);
+            statement.executeUpdate();
+            statement.close();
+            connection.close();
+            resultLabel.setText("SUCCESS");
+        }catch (Exception exception){
+            resultLabel.setText("Error");
+        }
+    }
 }

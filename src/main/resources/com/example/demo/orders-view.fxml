@@ -22,9 +22,10 @@
     <Text text="Enter Amount"/>
     <TextField fx:id="amountTF"/>
     <Button text="Add item to Order" onAction="#onAddNewItemToOrderButtonClick"/>
-    <Text text="Search Order"/>
-    <TextField fx:id="searchOrderIDTF"/>
+    <Text text="Enter Order ID:"/>
+    <TextField fx:id="orderIDTF"/>
     <Button text="Search Order" onAction="#onSearchOrderButtonClick"/>
+    <Button text="Close Order" onAction="#closeOrderStatusButtonClick"/>
     <Button text="Show All Orders" onAction="#onShowAllOrdersButtonClick"/>
     <ScrollPane minHeight="120" minWidth="150" maxHeight="120" maxWidth="350">
         <Label fx:id="resultLabel"/>
