@@ -66,7 +66,7 @@ public abstract class Controller {
     public void changeScene(Button button, String title, String resource) throws IOException {
         Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(resource));
-        Scene scene = new Scene(fxmlLoader.load(), 350, 620);
+        Scene scene = new Scene(fxmlLoader.load(), 350, 630);
         stage.setTitle("Project Database - " + title);
         stage.setScene(scene);
         stage.show();
