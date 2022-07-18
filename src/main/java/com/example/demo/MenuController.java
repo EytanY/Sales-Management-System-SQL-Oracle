@@ -1,10 +1,8 @@
 package com.example.demo;
 
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.paint.ImagePattern;
 
 import java.io.IOException;
 
@@ -38,35 +36,35 @@ public class MenuController extends Controller {
         //code
     }
 
-    public void onItemsButtonClick(ActionEvent actionEvent) throws IOException{
+    public void onItemsButtonClick() throws IOException{
         changeScene(itemsButton, "Items", "items-view.fxml");
     }
 
-    public void onWarehouseButtonClick(ActionEvent actionEvent) throws IOException{
+    public void onWarehouseButtonClick() throws IOException{
         changeScene(warehouseButton, "Warehouse And Stock", "warehouse-view.fxml");
     }
 
-    public void onOrdersButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onOrdersButtonClick() throws IOException {
         changeScene(ordersButton, "Orders", "orders-view.fxml");
     }
 
-    public void onDeliveriesButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onDeliveriesButtonClick() throws IOException {
         changeScene(deliveriesButton, "Deliveries", "deliveries-view.fxml");
     }
 
-    public void onAvailableProductsButtonClick(ActionEvent actionEvent) throws IOException{
+    public void onAvailableProductsButtonClick() throws IOException{
         changeScene(availableProductsButton, "Available Products", "report-products-view.fxml");
     }
 
-    public void onCustomerOrdersButtonClick(ActionEvent actionEvent) throws IOException{
+    public void onCustomerOrdersButtonClick() throws IOException{
         changeScene(customerOrderButton, "Customer's Orders", "customer-orders-view.fxml");
     }
 
-    public void onSearchOrdersByDateButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onSearchOrdersByDateButtonClick() throws IOException {
         changeScene(searchOrderByDateButton, "Orders by Date", "report-orders-date-view.fxml");
     }
 
-    public void onAllOpenOrdersButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onAllOpenOrdersButtonClick() throws IOException {
         changeScene(openOrdersButton, "Open Orders", "report-open-orders-view.fxml");
     }
 }
