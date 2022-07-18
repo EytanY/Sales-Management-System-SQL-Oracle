@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public abstract class Controller {
+    public static int deliveryID;
     //Item attributes
     public final String ITEM_TABLE = "ITEMS";
     public final String ITEM_DESCRIPTION = "ITEM_DESCRIPTION";
@@ -59,6 +60,7 @@ public abstract class Controller {
     public final String NUM_OF_ITEMS_TO_SEND_FUNC = "NUM_OF_ITEMS_TO_SEND";
     public final String GET_TOTAL_PRICE_OF_ORDER = "GET_TOTAL_PRICE_OF_ORDER";
     public final String ITEM_TOTAL_AMOUNT_FUNC = "ITEM_TOTAL_AMOUNT";
+    public final String NUM_OF_ITEMS_TO_SEND = "NUM_OF_ITEMS_TO_SEND";
     @FXML
     private Button menuButton;
 

@@ -1,10 +1,9 @@
 package com.example.demo;
 
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
+import java.io.IOException;
 import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -17,12 +16,12 @@ public class DeliveriesController extends Controller implements Initializable {
     public ArrayList<String> DELIVERY_TYPES = new ArrayList<>();
     public Label resultLabel;
     public ChoiceBox<String> deliveryTypeCB;
-    public TextField deliveryIDTF;
     public TextField itemIDTF;
     public TextField amountTF;
     public ChoiceBox<String> ordersIDChoice;
     public ChoiceBox<String> warehouseIDChoice;
     public ChoiceBox<String> deliveryIDChoice;
+    public Button addItemToDeliveryButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -197,5 +196,10 @@ public class DeliveriesController extends Controller implements Initializable {
         }catch (Exception exception){
             resultLabel.setText("Error!");
         }
+    }
+
+    public void addNewItemToDeliveryButtonClick() throws IOException {
+        deliveryID = Integer.parseInt(deliveryIDChoice.getValue());
+        changeScene(addItemToDeliveryButton, "Add New Item", "add-new-item-delivery-view.fxml");
     }
 }

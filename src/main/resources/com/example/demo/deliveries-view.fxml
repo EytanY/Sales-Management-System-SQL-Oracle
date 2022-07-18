@@ -5,7 +5,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Label?>
@@ -24,10 +23,7 @@
     <Button text="Add New Delivery:" onAction="#onAddNewDeliveryButtonClick"/>
     <Text text="Choose Delivery ID:"/>
     <ChoiceBox fx:id="deliveryIDChoice"/>
-    <Text text="Enter Item ID:"/>
-    <TextField fx:id="itemIDTF"/>
-    <Text text="Enter Amount:"/>
-    <TextField fx:id="amountTF"/>
+    <Button text="Add New Item" fx:id="addItemToDeliveryButton" onAction="#addNewItemToDeliveryButtonClick"/>
     <Button text="Search Delivery" onAction="#onSearchDeliveryButtonClick"/>
     <Button text="Show All Deliveries" onAction="#onSearchAllDeliveriesButtonClick"/>
     <ScrollPane minHeight="200" minWidth="150" maxHeight="200" maxWidth="350">
