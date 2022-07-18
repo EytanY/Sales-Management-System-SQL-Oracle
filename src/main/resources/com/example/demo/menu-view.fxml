@@ -17,7 +17,7 @@
     <Button text="Warehouse And Stock" fx:id="warehouseButton" onAction="#onWarehouseButtonClick"/>
     <Button text="Orders" fx:id="ordersButton" onAction="#onOrdersButtonClick"/>
     <Button text="Deliveries" fx:id="deliveriesButton" onAction="#onDeliveriesButtonClick"/>
-    <Button text="Cancel Invoice" onAction="#onRemoveButtonClick"/>
+    <Button text= "Invoices" fx:id="invoicesButton" onAction="#onInvoicesButtonClick"/>
     <Button text="Return Product" onAction="#onRemoveButtonClick"/>
     <Button text="Report Of Open Orders" fx:id="openOrdersButton" onAction="#onAllOpenOrdersButtonClick"/>
     <Button text="Report Of Available Products" fx:id="availableProductsButton" onAction="#onAvailableProductsButtonClick"/>

@@ -1,6 +1,7 @@
 package com.example.demo;
 
 
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
@@ -25,6 +26,8 @@ public class MenuController extends Controller {
     public Button searchOrderByDateButton;
     @FXML
     public Button openOrdersButton;
+    @FXML
+    public Button invoicesButton;
 
     @FXML
     public void onCostumersButtonClick() throws IOException {
@@ -66,5 +69,8 @@ public class MenuController extends Controller {
 
     public void onAllOpenOrdersButtonClick() throws IOException {
         changeScene(openOrdersButton, "Open Orders", "report-open-orders-view.fxml");
+    }
+
+    public void onInvoicesButtonClick() {
     }
 }
