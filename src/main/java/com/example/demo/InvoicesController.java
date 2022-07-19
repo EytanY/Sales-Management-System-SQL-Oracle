@@ -22,6 +22,7 @@ public class InvoicesController extends Controller{
             resultLabel.setText(printInvoiceOfDelivery(deliveryID));
         }catch (Exception exception){
             resultLabel.setText("Please Enter Valid ID!");
+
         }
     }
     @FXML
