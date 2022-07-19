@@ -79,65 +79,7 @@ public class DeliveriesController extends Controller implements Initializable {
         }
     }
 
-    public void onAddItemsToDeliveryButtonClick() {
 
-        try{
-            int deliveryID = Integer.parseInt(deliveryIDChoice.getValue());
-            int itemID = Integer.parseInt(itemIDTF.getText());
-            int amount = Integer.parseInt(amountTF.getText());
-            Connection connection = new SQL().getConnection();
-            String searchSQL = String.format("select * from %s where %s = ? and %s = ?",
-                    ITEMS_IN_DELIVERY_TABLE, ITEMS_IN_ORDERS_ITEM_ID, ITEMS_IN_DELIVERY_DELIVERY_ID);
-            PreparedStatement searchStatement = connection.prepareStatement(searchSQL);
-            searchStatement.setInt(1, itemID);
-            searchStatement.setInt(2, deliveryID);
-            ResultSet searchResultSet = searchStatement.executeQuery();
-            if(searchResultSet.next()){
-
-                String amountSQL = String.format("SELECT %s(?, ?) from DUAL", NUM_OF_ITEMS_TO_SEND_FUNC);
-                PreparedStatement amountStatement = connection.prepareStatement(amountSQL);
-                amountStatement.setInt(1, deliveryID);
-                amountStatement.setInt(2, itemID);
-                ResultSet rs = amountStatement.executeQuery();
-                rs.next();
-
-                int maxAmount = rs.getInt(1);
-                if(amount > maxAmount) {
-                    resultLabel.setText("Amount is too high! Can send max " + maxAmount + " items with item ID : " + itemID +".");
-                    return;
-                }
-                else if(amount < 0){
-                    resultLabel.setText("Amount can not be negative");
-                    return;
-                }
-                else{
-                    String updateSQL = String.format("UPDATE %s SET %s = %s + ? WHERE %s = ? AND %s = ?",
-                            ITEMS_IN_DELIVERY_TABLE, ITEMS_IN_ORDERS_AMOUNT, ITEMS_IN_DELIVERY_AMOUNT, ITEMS_IN_DELIVERY_DELIVERY_ID
-                    , ITEMS_IN_DELIVERY_ITEM_ID);
-                    PreparedStatement updateStatement = connection.prepareStatement(updateSQL);
-                    updateStatement.setInt(1, amount);
-                    updateStatement.setInt(2, deliveryID);
-                    updateStatement.setInt(3, itemID);
-                    updateStatement.executeUpdate();
-                }
-
-            }else {
-                String sql = String.format("INSERT INTO %s(%s, %s, %s) VALUES(?, ?, ?)",
-                        ITEMS_IN_DELIVERY_TABLE, ITEMS_IN_DELIVERY_DELIVERY_ID, ITEMS_IN_DELIVERY_ITEM_ID, ITEMS_IN_ORDERS_AMOUNT);
-                PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setInt(1,deliveryID);
-                statement.setInt(2,itemID);
-                statement.setInt(3, amount);
-                statement.executeUpdate();
-            }
-            CallableStatement myCall = connection.prepareCall("{call update_order_status(?)}");
-            myCall.setInt(1, deliveryID);
-            myCall.executeUpdate();
-            resultLabel.setText("SUCCESS");
-        }catch (Exception exception){
-            resultLabel.setText("Error!");
-        }
-    }
 
     public void onSearchDeliveryButtonClick() {
         try{
