@@ -20,11 +20,6 @@ public class CustomersController extends Controller{
     public Button addNewCustomerButton;
     @FXML
     public Button searchCostumerButton;
-
-    //public TextField costumerID;
-    //public Button removeCostumerButton;
-
-    //public Label removeLabel;
     @FXML
     public Button showAllCostumersButton;
 
@@ -33,13 +28,7 @@ public class CustomersController extends Controller{
         String firstNameStr = firstName.getText();
         String lastNameStr = lastName.getText();
 
-        if(InvalidName(firstNameStr) || InvalidName(lastNameStr))
-        {
-            resultLabel.setText("Invalid name!");
-        }
-
         try{
-            Connection connection = new SQL().getConnection();
             String query = String.format("INSERT INTO %s (%s, %s) VALUES(?, ?)"
             , CUSTOMER_TABLE , CUSTOMER_FIRST_NAME, CUSTOMER_LAST_NAME);
             PreparedStatement statement = connection.prepareStatement(query);
@@ -55,9 +44,8 @@ public class CustomersController extends Controller{
             rs.next();
             resultLabel.setText("SUCCESS! New Customer ID:" + rs.getInt(CUSTOMER_ID));
 
-     //       statement.close();
+            statement.close();
             statement1.close();
-            connection.close();
         }catch (Exception exception){
             resultLabel.setText("Error");
         }
@@ -68,12 +56,8 @@ public class CustomersController extends Controller{
         String firstNameStr = firstName.getText();
         String lastNameStr = lastName.getText();
 
-        if(InvalidName(firstNameStr) || InvalidName(lastNameStr))
-        {
-            resultLabel.setText("Invalid name!");
-        }
         try{
-            Connection connection = new SQL().getConnection();
+            connection = new SQL().getConnection();
             String sql = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?"
             , CUSTOMER_TABLE, CUSTOMER_FIRST_NAME, CUSTOMER_LAST_NAME);
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -91,7 +75,6 @@ public class CustomersController extends Controller{
                 resultLabel.setText("Not Found");
             rs.close();
             statement.close();
-            connection.close();
         }
         catch (Exception exception){
             resultLabel.setText("Invalid Connection");
@@ -99,29 +82,9 @@ public class CustomersController extends Controller{
         }
     }
 
-//    public void onRemoveCostumerButtonClick() {
-//        String costumerIDStr =  costumerID.getText();
-//        try {
-//            Connection connection = new SQL().getConnection();
-//            String rmSql = "DELETE FROM customers WHERE customer_id = ?";
-//            PreparedStatement rmStatement = connection.prepareStatement(rmSql);
-//            rmStatement.setString(1, costumerIDStr);
-//            rmStatement.executeUpdate();
-//            removeLabel.setText("SUCCESSES");
-//            rmStatement.close();
-//            connection.close();
-//        }catch (Exception exception){
-//            removeLabel.setText("Invalid Connection");
-//        }
-//    }
-
-    public boolean InvalidName(String name){
-        return name.indexOf(';') != -1;
-    }
-
     public void onShowAllCostumersButtonClick() {
         try{
-            Connection connection = new SQL().getConnection();
+            connection = new SQL().getConnection();
             String sql = String.format("SELECT * FROM %s", CUSTOMER_TABLE);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
@@ -136,7 +99,6 @@ public class CustomersController extends Controller{
                 resultLabel.setText("Not Found");
             rs.close();
             statement.close();
-            connection.close();
         }
         catch (Exception exception){
             resultLabel.setText("Invalid Connection");

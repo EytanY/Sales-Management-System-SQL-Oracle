@@ -17,7 +17,6 @@ public class ReportOrdersDateController extends Controller{
 
     public void onSearchDeliveriesByDateButtonClick(ActionEvent actionEvent) {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = String.format("select * " +
                     "FROM %s  join %s on %s.%s = %s.%s " +
                     "JOIN %s ON %s.%s = %s.%s " +
@@ -46,7 +45,6 @@ public class ReportOrdersDateController extends Controller{
 
     public void onSearchOrdersByDateButtonClick(ActionEvent actionEvent) {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = String.format("select * " +
                     "FROM %s  join %s on %s.%s = %s.%s " +
                     "WHERE ? = TO_DATE(%s.%s) ",

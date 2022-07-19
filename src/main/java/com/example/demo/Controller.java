@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public abstract class Controller {
     public static int deliveryID;
+    public static Connection connection = new SQL().getConnection();
     //Item attributes
     public final String ITEM_TABLE = "ITEMS";
     public final String ITEM_DESCRIPTION = "ITEM_DESCRIPTION";
@@ -84,7 +85,6 @@ public abstract class Controller {
 
     public ArrayList<String> getColFromTable(String colName, String tableName){
         try {
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT %s FROM %s", colName, tableName);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
@@ -92,7 +92,6 @@ public abstract class Controller {
             while (resultSet.next()){
                 arrayList.add(resultSet.getInt(colName) + "");
             }
-            connection.close();
             statement.close();
             return arrayList;
         }catch (Exception exception){
@@ -103,14 +102,12 @@ public abstract class Controller {
 
     public int getTotalAmountItem(int itemID){
         try {
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT %s(?) FROM DUAL", ITEM_TOTAL_AMOUNT_FUNC);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, itemID);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             int amount = resultSet.getInt(1);
-            connection.close();
             statement.close();
             return amount;
         }catch (Exception exception){

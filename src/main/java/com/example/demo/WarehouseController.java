@@ -3,9 +3,7 @@ package com.example.demo;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -40,7 +38,6 @@ public class WarehouseController extends Controller implements Initializable {
 
     public void onAddNewWarehouseButtonClick() {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = String.format("INSERT INTO %s(%s)VALUES(?)", WAREHOUSE_TABLE, WAREHOUSE_NAME);
             PreparedStatement statement = connection.prepareStatement(sql);
             String warehouseName = warehouseNameTF.getText();
@@ -58,7 +55,6 @@ public class WarehouseController extends Controller implements Initializable {
             onReturnToMenuButtonClick();
 
             statement1.close();
-            connection.close();
 
         }catch (Exception exception){
             resultLabel.setText("ERROR!");
@@ -70,7 +66,6 @@ public class WarehouseController extends Controller implements Initializable {
 
         if(validSyntax(warehouseName)){
             try{
-                Connection connection = new SQL().getConnection();
                 String sql = String.format("SELECT * FROM %s WHERE %s = ? ", WAREHOUSE_TABLE, WAREHOUSE_NAME);
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, warehouseName);
@@ -85,7 +80,6 @@ public class WarehouseController extends Controller implements Initializable {
                     resultLabel.setText("Not Found");
                 rs.close();
                 statement.close();
-                connection.close();
             }
             catch (Exception exception){
                 resultLabel.setText("Invalid Connection");
@@ -99,7 +93,6 @@ public class WarehouseController extends Controller implements Initializable {
 
     public void onShowAllWarehousesButtonClick() {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT * FROM %s", WAREHOUSE_TABLE);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
@@ -113,7 +106,6 @@ public class WarehouseController extends Controller implements Initializable {
                 resultLabel.setText("Not Found");
             rs.close();
             statement.close();
-            connection.close();
         }
         catch (Exception exception){
             resultLabel.setText("Invalid Connection");
@@ -123,7 +115,6 @@ public class WarehouseController extends Controller implements Initializable {
 
     public void onShowStockButtonClick() {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT  %s.%s, %s.%s ,NVL(sum(%s), 0) as amount " +
                                        "FROM %s LEFT  JOIN %s " +
                                         "ON %s.%s = %s.%s " +
@@ -156,7 +147,6 @@ public class WarehouseController extends Controller implements Initializable {
                 resultLabel.setText("Amount can not be negative");
                 return;
             }
-            Connection connection = new SQL().getConnection();
             String sqlCheck = String.format("INSERT INTO %s(%s, %s, %s) " +
                                         "SELECT ?, ? , 0 " +
                                         "  FROM DUAL " +

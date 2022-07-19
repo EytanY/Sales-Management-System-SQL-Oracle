@@ -1,13 +1,9 @@
 package com.example.demo;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
-
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -25,7 +21,6 @@ public class ItemsController extends Controller {
 
     public void onAddNewItemButtonClick(ActionEvent actionEvent) {
         try {
-            Connection connection = new SQL().getConnection();
             String query = "INSERT INTO items (item_id, item_description, price) VALUES(?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, Integer.parseInt(itemIDTF.getText()));
@@ -34,14 +29,12 @@ public class ItemsController extends Controller {
             statement.executeUpdate();
             resultLabel.setText("SUCCESSES");
             statement.close();
-            connection.close();
         }catch (Exception exception){
             resultLabel.setText("NOT SUCCESSES- check the input(ID already used,price not a number...)");
         }
     }
     public void onSearchItemButtonClick(ActionEvent actionEvent) {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = "SELECT * FROM items WHERE item_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, Integer.parseInt(searchItemIDTF.getText()));
@@ -59,7 +52,6 @@ public class ItemsController extends Controller {
 
             rs.close();
             statement.close();
-            connection.close();
         }
         catch (Exception exception){
             resultLabel.setText("Invalid Connection");
@@ -67,7 +59,6 @@ public class ItemsController extends Controller {
     }
     public void onShowAllItemsButtonClick(ActionEvent actionEvent) {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = "SELECT * FROM items";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
@@ -84,7 +75,6 @@ public class ItemsController extends Controller {
 
             rs.close();
             statement.close();
-            connection.close();
         }
         catch (Exception exception){
             resultLabel.setText("Invalid Connection");

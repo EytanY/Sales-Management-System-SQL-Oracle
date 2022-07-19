@@ -4,8 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -17,7 +15,6 @@ public class CostumerOrdersController extends Controller{
 
     public void onSearchCustomerButtonClick(ActionEvent actionEvent) {
         try {
-            Connection connection = new SQL().getConnection();
             String sql = String.format("select %s.%s, %s.%s, %s.%s, %s.%s, %s.%s, %s(%s.%s) as price  " +
                     "FROM %s LEFT JOIN %s ON %s.%s = %s.%s " +
                     "WHERE %s.%s  = ? ",
@@ -26,10 +23,10 @@ public class CostumerOrdersController extends Controller{
                     CUSTOMER_ID, CUSTOMER_TABLE, CUSTOMER_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, Integer.parseInt(customerIDTF.getText()));
+            statement.close();
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             boolean hasInfo = false;
-            int orderID = 0;
             while (rs.next()){
                 if(!hasInfo){
                     sb.append("Customer's Name:").append(rs.getString(CUSTOMER_FIRST_NAME)).append(" ").append(rs.getString(CUSTOMER_LAST_NAME)).append("\n\n");
@@ -54,5 +51,6 @@ public class CostumerOrdersController extends Controller{
         }catch (Exception exception){
             resultLabel.setText("Error!");
         }
+
     }
 }

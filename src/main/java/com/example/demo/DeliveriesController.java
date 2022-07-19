@@ -2,10 +2,8 @@ package com.example.demo;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,8 +14,6 @@ public class DeliveriesController extends Controller implements Initializable {
     public ArrayList<String> DELIVERY_TYPES = new ArrayList<>();
     public Label resultLabel;
     public ChoiceBox<String> deliveryTypeCB;
-    public TextField itemIDTF;
-    public TextField amountTF;
     public ChoiceBox<String> ordersIDChoice;
     public ChoiceBox<String> warehouseIDChoice;
     public ChoiceBox<String> deliveryIDChoice;
@@ -52,7 +48,6 @@ public class DeliveriesController extends Controller implements Initializable {
         try {
             int orderID = Integer.parseInt(ordersIDChoice.getValue());
             int warehouseID = Integer.parseInt(warehouseIDChoice.getValue());
-            Connection connection = new SQL().getConnection();
             String sql = String.format("INSERT INTO %s (%s, %s, %s) VALUES ( ? , ? , ?)",
                     DELIVERY_TABLE, DELIVERY_ORDER_ID, DELIVERY_WAREHOUSE_ID, DELIVERY_TYPE);
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -71,7 +66,6 @@ public class DeliveriesController extends Controller implements Initializable {
             String messageStr = "SUCCESS! New Delivery ID:" + rs.getInt(DELIVERY_ID);
             message.setContentText(messageStr);
             message.show();
-            connection.close();
             statement1.close();
             onReturnToMenuButtonClick();
         }catch (Exception exception){
@@ -83,7 +77,6 @@ public class DeliveriesController extends Controller implements Initializable {
 
     public void onSearchDeliveryButtonClick() {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT * " +
                                         "FROM %s LEFT JOIN %s " +
                                         "ON %s.%s = %s.%s " +
@@ -120,7 +113,6 @@ public class DeliveriesController extends Controller implements Initializable {
 
     public void onSearchAllDeliveriesButtonClick() {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT * FROM %s",
                     DELIVERY_TABLE);
             PreparedStatement statement = connection.prepareStatement(sql);

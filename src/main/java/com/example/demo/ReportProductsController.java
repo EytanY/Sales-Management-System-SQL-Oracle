@@ -23,7 +23,6 @@ public class ReportProductsController extends Controller implements Initializabl
 
     public String getAvailableProducts() {
         try {
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT  %s.%s, %s.%s, %s.%s ,NVL(sum(%s), 0) as %s  " +
                     "FROM %s LEFT  JOIN %s " +
                     "ON %s.%s = %s.%s " +
@@ -51,7 +50,6 @@ public class ReportProductsController extends Controller implements Initializabl
 
     public String getAvailableProductsByWarehouses(){
         try {
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT  * " +
                     "FROM %s LEFT JOIN %s ON %s.%s = %s.%s " +
                     "WHERE %s.%s > 0 " +

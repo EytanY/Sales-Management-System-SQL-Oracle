@@ -41,7 +41,7 @@ public class OrdersController extends Controller implements Initializable {
 
     public void onAddNewOrderButtonClick() {
         try{
-            Connection connection = new SQL().getConnection();
+            connection = new SQL().getConnection();
 
             String sql = String.format("INSERT INTO %s(%s) VALUES(?)", ORDER_TABLE, ORDER_CUSTOMER_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -77,7 +77,7 @@ public class OrdersController extends Controller implements Initializable {
                 resultLabel.setText("Amount is too high! Total Amount in Stock is " + maxAmount);
                 return;
             }
-            Connection connection = new SQL().getConnection();
+            connection = new SQL().getConnection();
             String searchSQL = String.format("select * from %s where %s = ? and %s = ?",
                     ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_ITEM_ID, ITEMS_IN_ORDERS_ORDER_ID);
             PreparedStatement searchStatement = connection.prepareStatement(searchSQL);
@@ -123,7 +123,6 @@ public class OrdersController extends Controller implements Initializable {
 
     public void onSearchOrderButtonClick() {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT * " +
                                         "FROM %s JOIN %s ON %s.%s = %s.%s " +
                                         "LEFT JOIN %s ON %s.%s = %s.%s " +
@@ -165,7 +164,6 @@ public class OrdersController extends Controller implements Initializable {
 
     public void onShowAllOrdersButtonClick() {
         try{
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT * " +
                                         "FROM %s, %s " +
                                         "WHERE %s.%s = %s.%s"
@@ -196,14 +194,13 @@ public class OrdersController extends Controller implements Initializable {
     public void closeOrderStatusButtonClick() {
         try {
             int orderID = Integer.parseInt(orderIDTF.getText());
-            Connection connection = new SQL().getConnection();
+            connection = new SQL().getConnection();
             String sql = String.format("UPDATE %s SET %s = 0 WHERE %s =  ?", ORDER_TABLE,
                     ORDER_STATUS, ORDER_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderID);
             statement.executeUpdate();
             statement.close();
-            connection.close();
             resultLabel.setText("SUCCESS");
         }catch (Exception exception){
             resultLabel.setText("Error");

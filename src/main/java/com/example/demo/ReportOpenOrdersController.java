@@ -3,7 +3,6 @@ package com.example.demo;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +20,6 @@ public class ReportOpenOrdersController extends Controller implements Initializa
 
     public String getAllOpenOrders() {
         try {
-            Connection connection = new SQL().getConnection();
             String sql = String.format("SELECT * " +
                     "FROM %s, %s " +
                     "WHERE %s.%s = %s.%s AND %s.%s = 1 ",

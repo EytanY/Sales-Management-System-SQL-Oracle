@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.demo.ReportProductsController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.demo.ReturnProductController"
+      spacing="5.0">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <Text text="Return Product:"/>
+    <Text text="Enter Delivery ID:"/>
+    <TextField fx:id="deliveryIDTF"/>
+    <Text text="Enter Item ID:"/>
+    <TextField fx:id="itemIDTF"/>
+    <Button text="Return Product" onAction="#onReturnProductButtonClick"/>
+    <Text text="Result:"/>
+    <ScrollPane minWidth="300" minHeight="300" maxHeight="300">
+        <Label fx:id="resultLabel"/>
+    </ScrollPane>
+    <Button text="Return to Menu" onAction="#onReturnToMenuButtonClick" fx:id="menuButton"/>
+</VBox>
