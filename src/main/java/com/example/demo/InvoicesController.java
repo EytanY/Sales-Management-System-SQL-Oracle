@@ -34,10 +34,30 @@ public class InvoicesController extends Controller{
         }
     }
     @FXML
-    public void onCancelDeliveryButton() {
+    public void onCancelOrderButton() {
+        try {
+            int orderID = Integer.parseInt(orderIDTF.getText());
+            String sql = String.format("DELETE FROM %s WHERE %s = ?", ORDER_TABLE, ORDER_ID);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, orderID);
+            statement.executeUpdate();
+            resultLabel.setText("SUCCESS");
+        }catch (Exception exception){
+            resultLabel.setText("Error!");
+        }
     }
     @FXML
-    public void onCancelOrderButton() {
+    public void onCancelDeliveryButton() {
+        try {
+            int deliveryID = Integer.parseInt(deliveryIDTF.getText());
+            String sql = String.format("DELETE FROM %s WHERE %s = ?", DELIVERY_TABLE, DELIVERY_ID);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, deliveryID);
+            statement.executeUpdate();
+            resultLabel.setText("SUCCESS");
+        }catch (Exception exception){
+            resultLabel.setText("Error!");
+        }
     }
 
     public String printInvoiceOfDelivery(int deliveryID){
