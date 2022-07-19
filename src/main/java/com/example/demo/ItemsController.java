@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,7 +18,7 @@ public class ItemsController extends Controller {
     public Button showAllItemsButton;
 
 
-    public void onAddNewItemButtonClick(ActionEvent actionEvent) {
+    public void onAddNewItemButtonClick() {
         try {
             String query = "INSERT INTO items (item_id, item_description, price) VALUES(?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -33,7 +32,7 @@ public class ItemsController extends Controller {
             resultLabel.setText("NOT SUCCESSES- check the input(ID already used,price not a number...)");
         }
     }
-    public void onSearchItemButtonClick(ActionEvent actionEvent) {
+    public void onSearchItemButtonClick() {
         try{
             String sql = "SELECT * FROM items WHERE item_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -57,7 +56,7 @@ public class ItemsController extends Controller {
             resultLabel.setText("Invalid Connection");
         }
     }
-    public void onShowAllItemsButtonClick(ActionEvent actionEvent) {
+    public void onShowAllItemsButtonClick() {
         try{
             String sql = "SELECT * FROM items";
             PreparedStatement statement = connection.prepareStatement(sql);

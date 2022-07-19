@@ -58,10 +58,11 @@ public abstract class Controller {
     public final String ITEMS_IN_DELIVERY_AMOUNT = "AMOUNT";
 
     // Functions
-    public final String NUM_OF_ITEMS_TO_SEND_FUNC = "NUM_OF_ITEMS_TO_SEND";
-    public final String GET_TOTAL_PRICE_OF_ORDER = "GET_TOTAL_PRICE_OF_ORDER";
+    public final String GET_TOTAL_PRICE_OF_ORDER_FUNC = "GET_TOTAL_PRICE_OF_ORDER";
     public final String ITEM_TOTAL_AMOUNT_FUNC = "ITEM_TOTAL_AMOUNT";
-    public final String NUM_OF_ITEMS_TO_SEND = "NUM_OF_ITEMS_TO_SEND";
+    public final String NUM_OF_ITEMS_TO_SEND_FUNC = "NUM_OF_ITEMS_TO_SEND";
+    public final String GET_TOTAL_PRICE_OF_DELIVERY_FUNC = "GET_TOTAL_PRICE_OF_DELIVERY";
+    public final String GET_TOTAL_PRICE_OF_ORDER_THAT_SEND_FUNC = "GET_TOTAL_PRICE_OF_ORDER_THAT_SEND";
     @FXML
     private Button menuButton;
 

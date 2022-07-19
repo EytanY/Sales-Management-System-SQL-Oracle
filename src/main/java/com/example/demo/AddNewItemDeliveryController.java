@@ -103,7 +103,7 @@ public class AddNewItemDeliveryController extends Controller implements Initiali
         try{
             int maxAmount;
            Connection connection = new SQL().getConnection();
-           String sql = String.format("SELECT %S(?,?) as amount FROM DUAL", NUM_OF_ITEMS_TO_SEND);
+           String sql = String.format("SELECT %S(?,?) as amount FROM DUAL", NUM_OF_ITEMS_TO_SEND_FUNC);
            PreparedStatement statement = connection.prepareStatement(sql);
            statement.setInt(1, deliveryID);
            statement.setInt(2, itemID);

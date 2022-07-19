@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,13 +12,13 @@ public class CostumerOrdersController extends Controller{
     @FXML
     public TextField customerIDTF;
 
-    public void onSearchCustomerButtonClick(ActionEvent actionEvent) {
+    public void onSearchCustomerButtonClick() {
         try {
             String sql = String.format("select %s.%s, %s.%s, %s.%s, %s.%s, %s.%s, %s(%s.%s) as price  " +
                     "FROM %s LEFT JOIN %s ON %s.%s = %s.%s " +
                     "WHERE %s.%s  = ? ",
                     CUSTOMER_TABLE, CUSTOMER_FIRST_NAME, CUSTOMER_TABLE, CUSTOMER_LAST_NAME, ORDER_TABLE, ORDER_DATE, ORDER_TABLE, ORDER_ID, ORDER_TABLE, ORDER_STATUS,
-                    GET_TOTAL_PRICE_OF_ORDER, ORDER_TABLE, ORDER_ID, CUSTOMER_TABLE, ORDER_TABLE, ORDER_TABLE, ORDER_CUSTOMER_ID, CUSTOMER_TABLE,
+                    GET_TOTAL_PRICE_OF_ORDER_FUNC, ORDER_TABLE, ORDER_ID, CUSTOMER_TABLE, ORDER_TABLE, ORDER_TABLE, ORDER_CUSTOMER_ID, CUSTOMER_TABLE,
                     CUSTOMER_ID, CUSTOMER_TABLE, CUSTOMER_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, Integer.parseInt(customerIDTF.getText()));

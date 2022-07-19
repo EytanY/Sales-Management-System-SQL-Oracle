@@ -1,10 +1,9 @@
 package com.example.demo;
 
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +14,7 @@ public class ReportOrdersDateController extends Controller{
     @FXML
     public DatePicker dateOrders;
 
-    public void onSearchDeliveriesByDateButtonClick(ActionEvent actionEvent) {
+    public void onSearchDeliveriesByDateButtonClick() {
         try{
             String sql = String.format("select * " +
                     "FROM %s  join %s on %s.%s = %s.%s " +
@@ -43,7 +42,7 @@ public class ReportOrdersDateController extends Controller{
         }
     }
 
-    public void onSearchOrdersByDateButtonClick(ActionEvent actionEvent) {
+    public void onSearchOrdersByDateButtonClick() {
         try{
             String sql = String.format("select * " +
                     "FROM %s  join %s on %s.%s = %s.%s " +

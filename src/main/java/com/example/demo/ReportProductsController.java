@@ -3,7 +3,6 @@ package com.example.demo;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
