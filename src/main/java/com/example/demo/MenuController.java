@@ -71,6 +71,8 @@ public class MenuController extends Controller {
         changeScene(openOrdersButton, "Open Orders", "report-open-orders-view.fxml");
     }
 
-    public void onInvoicesButtonClick() {
+    public void onInvoicesButtonClick() throws IOException {
+        changeScene(openOrdersButton, "Invoices", "invoices-view.fxml");
+
     }
 }
