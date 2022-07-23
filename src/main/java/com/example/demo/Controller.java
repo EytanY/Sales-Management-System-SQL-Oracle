@@ -59,6 +59,7 @@ public abstract class Controller {
 
     // Functions
     public final String GET_TOTAL_PRICE_OF_ORDER_FUNC = "GET_TOTAL_PRICE_OF_ORDER";
+    public final  String IS_ORDER_DONE_FUNC = "IS_ORDER_DONE";
     public final String MAX_AMOUNT_FOR_ITEM_THAT_CAN_DELIVERED = "MAX_AMOUNT_FOR_ITEM_THAT_CAN_DELIVERED";
     public final String NUM_OF_ITEMS_TO_SEND_FUNC = "NUM_OF_ITEMS_TO_SEND";
     public final String GET_TOTAL_PRICE_OF_DELIVERY_FUNC = "GET_TOTAL_PRICE_OF_DELIVERY";
@@ -70,7 +71,7 @@ public abstract class Controller {
     public void changeScene(Button button, String title, String resource) throws IOException {
         Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(resource));
-        Scene scene = new Scene(fxmlLoader.load(), 350, 630);
+        Scene scene = new Scene(fxmlLoader.load(), 350, 650);
         stage.setTitle("Project Database - " + title);
         stage.setScene(scene);
         stage.show();
@@ -97,22 +98,6 @@ public abstract class Controller {
             return arrayList;
         }catch (Exception exception){
             return null;
-        }
-
-    }
-
-    public int getTotalAmountItem(int itemID){
-        try {
-            String sql = String.format("SELECT %s(?) FROM DUAL", MAX_AMOUNT_FOR_ITEM_THAT_CAN_DELIVERED);
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, itemID);
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            int amount = resultSet.getInt(1);
-            statement.close();
-            return amount;
-        }catch (Exception exception){
-            return 0;
         }
     }
 }

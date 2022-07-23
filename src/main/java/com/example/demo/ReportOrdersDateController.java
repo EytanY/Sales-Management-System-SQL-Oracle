@@ -30,7 +30,7 @@ public class ReportOrdersDateController extends Controller{
             sb.append("Deliveries::\n");
             while(rs.next()){
                 sb.append("Delivery ID:").append(rs.getInt(DELIVERY_ID));
-                sb.append( ",Type:").append(rs.getString(DELIVERY_TYPE)).append(" ").append(rs.getString("last_name"));
+                sb.append( ",Type:").append(rs.getString(DELIVERY_TYPE)).append(" ").append(" Customer:").append(rs.getString(CUSTOMER_FIRST_NAME)).append(" ").append(rs.getString(CUSTOMER_LAST_NAME));
                 sb.append(" From Warehouse ID:").append(rs.getInt(DELIVERY_WAREHOUSE_ID));
                 sb.append(" ,Order ID:").append(rs.getInt(DELIVERY_ORDER_ID)).append(" ,Status").append(rs.getInt(ORDER_STATUS)).append("\n");
             }
