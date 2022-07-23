@@ -27,6 +27,8 @@ public class MenuController extends Controller {
     public Button invoicesButton;
     @FXML
     public Button returnProductButton;
+    @FXML
+    public Button unfinishedOrdersButton;
 
     @FXML
     public void onCostumersButtonClick() throws IOException {
@@ -73,5 +75,9 @@ public class MenuController extends Controller {
     @FXML
     public void onReturnProductButtonClick() throws IOException {
         changeScene(returnProductButton, "Return Product", "return-product-view.fxml");
+    }
+
+    public void onUnfinishedOrdersButtonClick() throws IOException {
+        changeScene(unfinishedOrdersButton, "Unfinished Orders", "unfinished-orders-view.fxml");
     }
 }

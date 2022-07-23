@@ -92,7 +92,7 @@ public class InvoicesController extends Controller{
                 }
                 sb.append("Item ID:").append(rs.getInt(5));
                 sb.append("  Amount:").append(rs.getInt(ITEMS_IN_DELIVERY_AMOUNT));
-                sb.append(", Price:").append(rs.getFloat("price_items")).append("\n");
+                sb.append(", Price:").append(rs.getFloat("price_items")).append("$.\n");
             }
             if(sb.toString().equals(""))
                 return "Invoice Not Founded";

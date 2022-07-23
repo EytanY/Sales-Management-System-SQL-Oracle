@@ -67,15 +67,11 @@ public class OrdersController extends Controller implements Initializable {
             int order_id = Integer.parseInt(orderIDChoice.getValue());
             int item_id = Integer.parseInt(itemIDChoice.getValue());
             int amount = Integer.parseInt(amountTF.getText());
-            int maxAmount = getTotalAmountItem(item_id);
             if(amount < 1 ) {
                 resultLabel.setText("Amount can not be negative!");
                 return;
             }
-            else if (amount > maxAmount){
-                resultLabel.setText("Amount is too high! Total Amount in Stock is " + maxAmount);
-                return;
-            }
+
             connection = new SQL().getConnection();
             String searchSQL = String.format("select * from %s where %s = ? and %s = ?",
                     ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_ITEM_ID, ITEMS_IN_ORDERS_ORDER_ID);

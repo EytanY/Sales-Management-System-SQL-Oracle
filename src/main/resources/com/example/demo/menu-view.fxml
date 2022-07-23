@@ -20,6 +20,7 @@
     <Button text= "Invoices" fx:id="invoicesButton" onAction="#onInvoicesButtonClick"/>
     <Button text="Return Product" fx:id="returnProductButton" onAction="#onReturnProductButtonClick"/>
     <Button text="Report Of Open Orders" fx:id="openOrdersButton" onAction="#onAllOpenOrdersButtonClick"/>
+    <Button text="Report Of Unfinished Order" fx:id="unfinishedOrdersButton" onAction="#onUnfinishedOrdersButtonClick"/>
     <Button text="Report Of Available Products" fx:id="availableProductsButton" onAction="#onAvailableProductsButtonClick"/>
     <Button text="Report Of Sales For Costumer" fx:id="customerOrderButton" onAction="#onCustomerOrdersButtonClick"/>
     <Button text="Report Of Orders in date" fx:id="searchOrderByDateButton" onAction="#onSearchOrdersByDateButtonClick"/>

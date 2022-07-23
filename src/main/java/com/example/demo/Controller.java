@@ -59,7 +59,7 @@ public abstract class Controller {
 
     // Functions
     public final String GET_TOTAL_PRICE_OF_ORDER_FUNC = "GET_TOTAL_PRICE_OF_ORDER";
-    public final String ITEM_TOTAL_AMOUNT_FUNC = "ITEM_TOTAL_AMOUNT";
+    public final String MAX_AMOUNT_FOR_ITEM_THAT_CAN_DELIVERED = "MAX_AMOUNT_FOR_ITEM_THAT_CAN_DELIVERED";
     public final String NUM_OF_ITEMS_TO_SEND_FUNC = "NUM_OF_ITEMS_TO_SEND";
     public final String GET_TOTAL_PRICE_OF_DELIVERY_FUNC = "GET_TOTAL_PRICE_OF_DELIVERY";
     public final String GET_TOTAL_PRICE_OF_ORDER_THAT_SEND_FUNC = "GET_TOTAL_PRICE_OF_ORDER_THAT_SEND";
@@ -103,7 +103,7 @@ public abstract class Controller {
 
     public int getTotalAmountItem(int itemID){
         try {
-            String sql = String.format("SELECT %s(?) FROM DUAL", ITEM_TOTAL_AMOUNT_FUNC);
+            String sql = String.format("SELECT %s(?) FROM DUAL", MAX_AMOUNT_FOR_ITEM_THAT_CAN_DELIVERED);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, itemID);
             ResultSet resultSet = statement.executeQuery();

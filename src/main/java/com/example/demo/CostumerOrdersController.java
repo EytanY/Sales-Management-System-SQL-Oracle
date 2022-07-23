@@ -22,8 +22,8 @@ public class CostumerOrdersController extends Controller{
                     CUSTOMER_ID, CUSTOMER_TABLE, CUSTOMER_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, Integer.parseInt(customerIDTF.getText()));
-            statement.close();
             ResultSet rs = statement.executeQuery();
+            System.out.println(sql);
             StringBuilder sb = new StringBuilder();
             boolean hasInfo = false;
             while (rs.next()){
@@ -41,6 +41,7 @@ public class CostumerOrdersController extends Controller{
 
 
             }
+            statement.close();
             if(sb.toString().equals("")){
                 resultLabel.setText("Not Found!");
             }
