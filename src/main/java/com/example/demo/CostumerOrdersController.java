@@ -38,8 +38,6 @@ public class CostumerOrdersController extends Controller{
                     sb.append(" ,Status:").append(rs.getInt(ORDER_STATUS));
                     sb.append(" ,Total Price:").append(rs.getFloat("price")).append("$\n");
                 }
-
-
             }
             statement.close();
             if(sb.toString().equals("")){

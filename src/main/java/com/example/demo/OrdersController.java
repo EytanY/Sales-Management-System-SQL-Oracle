@@ -118,15 +118,14 @@ public class OrdersController extends Controller implements Initializable {
 
     public void onSearchOrderButtonClick() {
         try{
-            String sql = String.format("SELECT * , %s(%s) as done " +
+            String sql = String.format("SELECT * " +
                                         "FROM %s JOIN %s ON %s.%s = %s.%s " +
                                         "LEFT JOIN %s ON %s.%s = %s.%s " +
-                                        "WHERE %s.%s = ?"
-                   ,IS_ORDER_DONE_FUNC, ORDER_ID , CUSTOMER_TABLE, ORDER_TABLE, CUSTOMER_TABLE, CUSTOMER_ID, ORDER_TABLE, ORDER_CUSTOMER_ID,
+                                        "WHERE %s.%s = ?",
+                    CUSTOMER_TABLE, ORDER_TABLE, CUSTOMER_TABLE, CUSTOMER_ID, ORDER_TABLE, ORDER_CUSTOMER_ID,
                     ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_ORDER_ID, ORDER_TABLE, ORDER_ID,
                     ORDER_TABLE, ORDER_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
-            System.out.println(sql);
             statement.setInt(1, Integer.parseInt(orderIDTF.getText()));
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
@@ -135,7 +134,7 @@ public class OrdersController extends Controller implements Initializable {
                 if(!found) {
                     sb.append("Order ID:").append(rs.getInt(ORDER_ID));
                     sb.append("  Date:").append(rs.getDate(ORDER_DATE));
-                    sb.append("  Status:").append(rs.getInt(ORDER_STATUS)).append("Done:").append(rs.getInt("done")).append("\n");
+                    sb.append("  Status:").append(rs.getInt(ORDER_STATUS)).append("\n");
                     sb.append("Customer ID:").append(rs.getInt(ORDER_CUSTOMER_ID));
                     sb.append("  First Name:").append(rs.getString(CUSTOMER_FIRST_NAME));
                     sb.append("  Last Name:").append(rs.getString(CUSTOMER_LAST_NAME)).append("\n\n");
