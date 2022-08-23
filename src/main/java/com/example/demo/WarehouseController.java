@@ -115,12 +115,7 @@ public class WarehouseController extends Controller implements Initializable {
 
     public void onShowStockButtonClick() {
         try{
-            String sql = String.format("SELECT  %s.%s, %s.%s ,NVL(sum(%s), 0) as amount " +
-                                       "FROM %s LEFT  JOIN %s " +
-                                        "ON %s.%s = %s.%s " +
-                                        "GROUP BY %s.%s, %s.%s " +
-                                        "ORDER BY amount DESC" , ITEM_TABLE, ITEM_ID, ITEM_TABLE,ITEM_PRICE, STOCK_AMOUNT,
-                    ITEM_TABLE, STOCK_TABLE, STOCK_TABLE , STOCK_ITEM_ID, ITEM_TABLE, ITEM_ID,ITEM_TABLE, ITEM_ID, ITEM_TABLE, ITEM_PRICE);
+            String sql = "select * from items_in_stock";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();

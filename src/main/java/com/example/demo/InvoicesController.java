@@ -64,18 +64,9 @@ public class InvoicesController extends Controller{
     public String printInvoiceOfDelivery(int deliveryID){
         try {
             float totalPrice = 0;
-            String sql = String.format("select %s.%s, %s,%s, %s, %s.%s, %s, %s, " +
-                            "%s * %s as price_items, %s(?) as total " +
-                            "from %s left join %s on %s.%s = %s.%s " +
-                            "INNER JOIN %s ON %s.%s = %s.%s " +
-                            "where %s.%s = ?", DELIVERY_TABLE, DELIVERY_ID, DELIVERY_WAREHOUSE_ID, DELIVERY_DATE, DELIVERY_TYPE
-                    ,ITEM_TABLE, ITEM_ID, DELIVERY_ORDER_ID, ITEMS_IN_DELIVERY_AMOUNT, ITEM_PRICE, ITEMS_IN_DELIVERY_AMOUNT
-                    , GET_TOTAL_PRICE_OF_DELIVERY_FUNC, DELIVERY_TABLE, ITEMS_IN_DELIVERY_TABLE, DELIVERY_TABLE, DELIVERY_ID,
-                    ITEMS_IN_DELIVERY_TABLE, ITEMS_IN_DELIVERY_DELIVERY_ID, ITEM_TABLE, ITEMS_IN_DELIVERY_TABLE, ITEMS_IN_DELIVERY_ITEM_ID,
-                    ITEM_TABLE, ITEM_ID, DELIVERY_TABLE, DELIVERY_ID);
+            String sql = ("select * from invoices where delivery_id = ?");
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, deliveryID);
-            statement.setInt(2, deliveryID);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             boolean firstIteration = true;
@@ -105,16 +96,9 @@ public class InvoicesController extends Controller{
 
     public String printInvoiceOfOrder(int orderID){
         try{
-            String sql = String.format("select %s.%s,  %s(?) " +
-                    "from %s LEFT JOIN %s ON %s.%s = %s.%s left join %s on %s.%s = %s.%s " +
-                    "where %s.%s = ? " +
-                    "GROUP by %s.%s",
-                    DELIVERY_TABLE, DELIVERY_ID, GET_TOTAL_PRICE_OF_ORDER_THAT_SEND_FUNC, ORDER_TABLE, DELIVERY_TABLE, ORDER_TABLE, ORDER_ID,
-                    DELIVERY_TABLE, DELIVERY_ORDER_ID, ITEMS_IN_DELIVERY_TABLE, DELIVERY_TABLE, DELIVERY_ID, ITEMS_IN_DELIVERY_TABLE,
-                    ITEMS_IN_DELIVERY_DELIVERY_ID,  DELIVERY_TABLE, DELIVERY_ORDER_ID, DELIVERY_TABLE, DELIVERY_ID);
+            String sql = "select delivery_id, get_total_price_of_order_that_send(order_id) from delivery where order_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderID);
-            statement.setInt(2, orderID);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             boolean firstIteration = true;

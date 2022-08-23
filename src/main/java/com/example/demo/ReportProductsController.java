@@ -22,24 +22,16 @@ public class ReportProductsController extends Controller implements Initializabl
 
     public String getAvailableProducts() {
         try {
-            String sql = String.format("SELECT  %s.%s, %s.%s, %s.%s ,NVL(sum(%s), 0) as %s  " +
-                    "FROM %s LEFT  JOIN %s " +
-                    "ON %s.%s = %s.%s " +
-                    "GROUP BY %s.%s, %s.%s, %s.%s " +
-                    "HAVING NVL(sum(%s), 0) > 0 "+
-                    "ORDER BY 4 DESC",
-                    ITEM_TABLE, ITEM_ID, ITEM_TABLE, ITEM_PRICE, ITEM_TABLE, ITEM_DESCRIPTION, STOCK_AMOUNT, STOCK_AMOUNT,
-                    ITEM_TABLE, STOCK_TABLE, STOCK_TABLE, STOCK_ITEM_ID, ITEM_TABLE, ITEM_ID, ITEM_TABLE, ITEM_ID, ITEM_TABLE, ITEM_PRICE,
-                    ITEM_TABLE, ITEM_DESCRIPTION, STOCK_AMOUNT);
+            String sql = "select * from items_in_stock";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (rs.next()) {
-                sb.append("Item ID:").append(rs.getInt(ITEM_ID));
-                sb.append(" ,Description:").append(rs.getString(ITEM_DESCRIPTION));
-                sb.append(" ,Price:").append(rs.getFloat(ITEM_PRICE));
+                sb.append("Item ID:").append(rs.getInt(1));
+                sb.append(" ,Description:").append(rs.getString(3));
+                sb.append(" ,Price:").append(rs.getFloat(2));
 
-                sb.append(" ,Total Amount:").append(rs.getInt(STOCK_AMOUNT)).append("\n");
+                sb.append(" ,Total Amount:").append(rs.getInt(4)).append("\n");
             }
             return sb.toString();
         } catch (Exception e) {
@@ -49,12 +41,7 @@ public class ReportProductsController extends Controller implements Initializabl
 
     public String getAvailableProductsByWarehouses(){
         try {
-            String sql = String.format("SELECT  * " +
-                    "FROM %s LEFT JOIN %s ON %s.%s = %s.%s " +
-                    "WHERE %s.%s > 0 " +
-                    "order by %s.%s ",
-                    WAREHOUSE_TABLE, STOCK_TABLE, STOCK_TABLE, STOCK_WAREHOUSE_ID, WAREHOUSE_TABLE, WAREHOUSE_ID,
-                    STOCK_TABLE, STOCK_AMOUNT, STOCK_TABLE, STOCK_WAREHOUSE_ID);
+            String sql = "select * from items_in_warehouses";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
