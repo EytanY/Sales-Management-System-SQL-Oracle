@@ -138,31 +138,20 @@ public class WarehouseController extends Controller implements Initializable {
     public void onAddAmountOfProductsToStockButtonClick() {
         try{
             int amount = Integer.parseInt(amountTF.getText());
-            if(amount < 1){
+            if(amount < 0){
                 resultLabel.setText("Amount can not be negative");
                 return;
             }
-            String sqlCheck = String.format("INSERT INTO %s(%s, %s, %s) " +
-                                        "SELECT ?, ? , 0 " +
-                                        "  FROM DUAL " +
-                                       " WHERE NOT EXISTS (SELECT NULL  FROM %s  WHERE  %s = ? AND  %s = ?)",
-                    STOCK_TABLE, STOCK_WAREHOUSE_ID, STOCK_ITEM_ID, STOCK_AMOUNT, STOCK_TABLE, STOCK_WAREHOUSE_ID, STOCK_ITEM_ID) ;
-            PreparedStatement checkItemInStockStatement = connection.prepareStatement(sqlCheck);
+
             int warehouseID = Integer.parseInt(warehouseIDChoice.getValue());
             int productID = Integer.parseInt(productIDChoice.getValue());
-            checkItemInStockStatement.setInt(1, warehouseID);
-            checkItemInStockStatement.setInt(2, productID);
-            checkItemInStockStatement.setInt(3, warehouseID);
-            checkItemInStockStatement.setInt(4, productID);
-            checkItemInStockStatement.executeUpdate();
 
-            String sql = String.format("UPDATE %s SET %s = %s + ? WHERE %s = ? AND %s = ?"
-                    ,STOCK_TABLE, STOCK_AMOUNT,STOCK_AMOUNT ,STOCK_WAREHOUSE_ID, STOCK_ITEM_ID);
+           String sql = "EXECUTE ADD_ITEM_TO_STOCK_PR(?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, amount);
+            statement.setInt(1, productID);
             statement.setInt(2, warehouseID);
-            statement.setInt(3,productID);
-            statement.executeUpdate();
+            statement.setInt(3,amount);
+            statement.execute();
             resultLabel.setText("SUCCESSES");
         }catch (Exception exception){
             resultLabel.setText("Error!");
