@@ -8,19 +8,28 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.demo.ReturnProductController"
+      fx:controller="com.example.demo.RemoveController"
       spacing="5.0">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
-    <Text text="Return Product:"/>
+    <Text text="Return Item From Delivery:"/>
     <Text text="Enter Delivery ID:"/>
     <TextField fx:id="deliveryIDTF"/>
     <Text text="Enter Item ID:"/>
     <TextField fx:id="itemIDTF"/>
     <Button text="Return Product" onAction="#onReturnProductButtonClick"/>
+    <Text text="Enter Delivery ID:"/>
+    <TextField fx:id="deliveryRemoveIDTF"/>
+    <Button text="Remove Delivery" onAction="#onCancelDeliveryButton"/>
+    <Text text="Enter Order ID:"/>
+    <TextField fx:id="orderIDTF"/>
+    <Button text="Customer Order" onAction="#onCancelOrderButton"/>
+    <Text text="Enter Customer ID:"/>
+    <TextField fx:id="customerIDTF"/>
+    <Button text="Remove Customer" onAction="#onRemoveCustomerButton"/>
     <Text text="Result:"/>
-    <ScrollPane minWidth="300" minHeight="300" maxHeight="300">
+    <ScrollPane minWidth="300" minHeight="50" maxHeight="50">
         <Label fx:id="resultLabel"/>
     </ScrollPane>
     <Button text="Return to Menu" onAction="#onReturnToMenuButtonClick" fx:id="menuButton"/>

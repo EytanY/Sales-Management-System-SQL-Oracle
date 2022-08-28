@@ -4,8 +4,10 @@ package com.example.demo;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import java.net.URL;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -38,23 +40,18 @@ public class WarehouseController extends Controller implements Initializable {
 
     public void onAddNewWarehouseButtonClick() {
         try{
-            String sql = String.format("INSERT INTO %s(%s)VALUES(?)", WAREHOUSE_TABLE, WAREHOUSE_NAME);
-            PreparedStatement statement = connection.prepareStatement(sql);
-            String warehouseName = warehouseNameTF.getText();
-            statement.setString(1, warehouseName);
-            statement.executeUpdate();
-            statement.close();
-            String sql1 = String.format("SELECT max(%s) from %s", WAREHOUSE_ID, WAREHOUSE_TABLE);
-            PreparedStatement statement1 = connection.prepareStatement(sql1);
-            ResultSet rs =  statement1.executeQuery();
-            rs.next();
+            String sql = "{CALL add_warehouse(?, ?)}";
+            CallableStatement statement = connection.prepareCall(sql);
+            statement.setString(1, warehouseNameTF.getText());
+            statement.registerOutParameter(2,Types.INTEGER);
+            statement.execute();
             Alert message = new Alert(Alert.AlertType.INFORMATION);
-            String messageStr = "SUCCESS! New Warehouse ID:" + rs.getInt(String.format("max(%s)", WAREHOUSE_ID));
+            String messageStr = "SUCCESS! New Warehouse ID:" + statement.getInt(2);
             message.setContentText(messageStr);
             message.show();
+            statement.close();
             onReturnToMenuButtonClick();
 
-            statement1.close();
 
         }catch (Exception exception){
             resultLabel.setText("ERROR!");
@@ -146,13 +143,13 @@ public class WarehouseController extends Controller implements Initializable {
             int warehouseID = Integer.parseInt(warehouseIDChoice.getValue());
             int productID = Integer.parseInt(productIDChoice.getValue());
 
-           String sql = "EXECUTE ADD_ITEM_TO_STOCK_PR(?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            String sql = "{CALL ADD_ITEM_TO_STOCK_PR(?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(sql);
             statement.setInt(1, productID);
             statement.setInt(2, warehouseID);
             statement.setInt(3,amount);
             statement.execute();
-            resultLabel.setText("SUCCESSES");
+            resultLabel.setText("Item:" + productID+" added to warehouse:"+ warehouseID +" successfully");
         }catch (Exception exception){
             resultLabel.setText("Error!");
         }

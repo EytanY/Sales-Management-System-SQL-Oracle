@@ -20,11 +20,9 @@
     <Text text="Enter Delivery ID:"/>
     <TextField fx:id="deliveryIDTF"/>
     <Button text="Show Invoice of Delivery" onAction="#onShowDeliveryInvoiceButtonClick"/>
-    <Button text="Cancel Delivery" onAction="#onCancelDeliveryButton"/>
     <Text text="Enter Order ID:"/>
     <TextField fx:id="orderIDTF"/>
     <Button text="Show Invoices of Order" onAction="#onShowOrderInvoiceButtonClick"/>
-    <Button text="Cancel Order" onAction="#onCancelOrderButton"/>
     <Text text="Result:"/>
     <ScrollPane minWidth="300" minHeight="300" maxHeight="300">
         <Label fx:id="resultLabel"/>

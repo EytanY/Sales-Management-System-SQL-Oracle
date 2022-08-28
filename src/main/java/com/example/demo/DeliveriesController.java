@@ -97,10 +97,10 @@ public class DeliveriesController extends Controller implements Initializable {
                     sb.append("Items:").append("\n");
                     firstIteration = true;
                }
-
-                sb.append("Item ID:").append(rs.getInt(ITEMS_IN_DELIVERY_ITEM_ID));
-                sb.append("  Amount:").append(rs.getInt(ITEMS_IN_DELIVERY_AMOUNT)).append("\n");
-
+                if(rs.getInt(ITEMS_IN_DELIVERY_ITEM_ID) != 0){
+                    sb.append("Item ID:").append(rs.getInt(ITEMS_IN_DELIVERY_ITEM_ID));
+                    sb.append("  Amount:").append(rs.getInt(ITEMS_IN_DELIVERY_AMOUNT)).append("\n");
+                }
 
             }
             resultLabel.setText(sb.toString());

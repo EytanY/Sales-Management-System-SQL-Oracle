@@ -23,7 +23,6 @@ public class CostumerOrdersController extends Controller{
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, Integer.parseInt(customerIDTF.getText()));
             ResultSet rs = statement.executeQuery();
-            System.out.println(sql);
             StringBuilder sb = new StringBuilder();
             boolean hasInfo = false;
             while (rs.next()){

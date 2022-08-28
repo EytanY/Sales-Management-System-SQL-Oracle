@@ -74,7 +74,7 @@ public class MenuController extends Controller {
     }
     @FXML
     public void onReturnProductButtonClick() throws IOException {
-        changeScene(returnProductButton, "Return Product", "return-product-view.fxml");
+        changeScene(returnProductButton, "Return Product", "remove-view.fxml");
     }
 
     public void onUnfinishedOrdersButtonClick() throws IOException {

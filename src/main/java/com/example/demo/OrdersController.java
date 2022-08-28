@@ -6,6 +6,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import java.net.URL;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -71,46 +72,13 @@ public class OrdersController extends Controller implements Initializable {
                 resultLabel.setText("Amount can not be negative!");
                 return;
             }
-
-            connection = new SQL().getConnection();
-            String searchSQL = String.format("select * from %s where %s = ? and %s = ?",
-                    ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_ITEM_ID, ITEMS_IN_ORDERS_ORDER_ID);
-            PreparedStatement searchStatement = connection.prepareStatement(searchSQL);
-            searchStatement.setInt(1, item_id);
-            searchStatement.setInt(2, order_id);
-            ResultSet searchResultSet = searchStatement.executeQuery();
-
-            String statusSql  = "SELECT get_status_of_order_by_id(?) FROM DUAL ";
-            PreparedStatement statusSteStatement = connection.prepareStatement(statusSql);
-            statusSteStatement.setInt(1, order_id);
-            ResultSet resultSet = statusSteStatement.executeQuery();
-            resultSet.next();
-
-
-            if(resultSet.getInt(1) == 0){
-                resultLabel.setText("Order's Status Closed.");
-                return;
-            }
-            if(searchResultSet.next()){
-
-                String updateSQL = String.format("UPDATE %s SET %s = %s + ? WHERE %s = ? AND %s = ?",
-                        ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_AMOUNT, ITEMS_IN_ORDERS_AMOUNT, ITEMS_IN_ORDERS_ORDER_ID, ITEMS_IN_ORDERS_ITEM_ID);
-                PreparedStatement updateStatement = connection.prepareStatement(updateSQL);
-                updateStatement.setInt(1, amount);
-                updateStatement.setInt(2, order_id);
-                updateStatement.setInt(3,item_id);
-                updateStatement.executeUpdate();
-
-            }else {
-                String sql = String.format("INSERT INTO %s(%s, %s, %s) VALUES(?, ?, ?)"
-                , ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_ORDER_ID, ITEMS_IN_ORDERS_ITEM_ID, ITEMS_IN_ORDERS_AMOUNT);
-                PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setInt(1, order_id);
-                statement.setInt(2, item_id);
-                statement.setInt(3, amount);
-                statement.executeUpdate();
-            }
-            resultLabel.setText("SUCCESS");
+            String sql = "{CALL add_item_to_order_pr(?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(sql);
+            statement.setInt(1, order_id);
+            statement.setInt(2, item_id);
+            statement.setInt(3,amount);
+            statement.execute();
+            resultLabel.setText(amount + " items" + item_id + " added to order " + order_id +" successfully");
         }catch (Exception exception){
             resultLabel.setText("Error");
         }
@@ -118,13 +86,7 @@ public class OrdersController extends Controller implements Initializable {
 
     public void onSearchOrderButtonClick() {
         try{
-            String sql = String.format("SELECT * " +
-                                        "FROM %s JOIN %s ON %s.%s = %s.%s " +
-                                        "LEFT JOIN %s ON %s.%s = %s.%s " +
-                                        "WHERE %s.%s = ?",
-                    CUSTOMER_TABLE, ORDER_TABLE, CUSTOMER_TABLE, CUSTOMER_ID, ORDER_TABLE, ORDER_CUSTOMER_ID,
-                    ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_ORDER_ID, ORDER_TABLE, ORDER_ID,
-                    ORDER_TABLE, ORDER_ID);
+            String sql = "select * from customers_orders where order_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, Integer.parseInt(orderIDTF.getText()));
             ResultSet rs = statement.executeQuery();
@@ -159,9 +121,7 @@ public class OrdersController extends Controller implements Initializable {
 
     public void onShowAllOrdersButtonClick() {
         try{
-            String sql = String.format("SELECT * " +
-                                        "FROM %s, %s " +
-                                        "WHERE %s.%s = %s.%s"
+            String sql = String.format("SELECT * FROM %s, %s WHERE %s.%s = %s.%s"
             , ORDER_TABLE, CUSTOMER_TABLE, CUSTOMER_TABLE, CUSTOMER_ID, ORDER_TABLE, ORDER_CUSTOMER_ID);
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
@@ -196,7 +156,7 @@ public class OrdersController extends Controller implements Initializable {
             statement.setInt(1, orderID);
             statement.executeUpdate();
             statement.close();
-            resultLabel.setText("SUCCESS");
+            resultLabel.setText("Order " + orderID + " closed successfully");
         }catch (Exception exception){
             resultLabel.setText("Error");
         }

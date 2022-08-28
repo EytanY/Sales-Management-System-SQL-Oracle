@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import java.net.URL;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,29 +33,13 @@ public class AddNewItemDeliveryController extends Controller implements Initiali
                 return;
             }
 
-            Connection connection = new SQL().getConnection();
-            String sqlCheck = String.format("INSERT INTO %s(%s, %s, %s) " +
-                            "SELECT ?, ? , 0 " +
-                            "  FROM DUAL " +
-                            " WHERE NOT EXISTS (SELECT NULL  FROM %s  WHERE  %s = ? AND  %s = ?)",
-                    ITEMS_IN_DELIVERY_TABLE, ITEMS_IN_DELIVERY_DELIVERY_ID, ITEMS_IN_DELIVERY_ITEM_ID, ITEMS_IN_DELIVERY_AMOUNT,
-                    ITEMS_IN_DELIVERY_TABLE, ITEMS_IN_DELIVERY_DELIVERY_ID, ITEMS_IN_DELIVERY_ITEM_ID) ;
-            PreparedStatement checkItemInDeliveryStatement = connection.prepareStatement(sqlCheck);
-            checkItemInDeliveryStatement.setInt(1, deliveryID);
-            checkItemInDeliveryStatement.setInt(2, item_id);
-            checkItemInDeliveryStatement.setInt(3, deliveryID);
-            checkItemInDeliveryStatement.setInt(4, item_id);
-            checkItemInDeliveryStatement.executeUpdate();
-
-            String sql = String.format("UPDATE %s SET %s = %s + ? WHERE %s = ? AND %s = ?"
-                    ,ITEMS_IN_DELIVERY_TABLE, ITEMS_IN_DELIVERY_AMOUNT,ITEMS_IN_DELIVERY_AMOUNT ,
-                    ITEMS_IN_DELIVERY_DELIVERY_ID, ITEMS_IN_DELIVERY_ITEM_ID);
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, amount);
-            statement.setInt(2, deliveryID);
-            statement.setInt(3,item_id);
-            statement.executeUpdate();
-            resultLabel.setText("SUCCESSES");
+            String sql = "{CALL add_item_to_delivery_pr(?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(sql);
+            statement.setInt(1, deliveryID);
+            statement.setInt(2, item_id);
+            statement.setInt(3,amount);
+            statement.execute();
+            resultLabel.setText(amount + " items (ID:" + item_id + ") added to delivery " + deliveryID);
         }catch (Exception exception){
             resultLabel.setText("Error!");
         }
@@ -76,15 +61,7 @@ public class AddNewItemDeliveryController extends Controller implements Initiali
         try {
 
             Connection connection = new SQL().getConnection();
-            String sql = String.format("Select %s.%s as %s " +
-                    "from %s  INNER JOIN %s on %s.%s = %s.%s " +
-                    "INNER join %s on %s.%s = %s.%s " +
-                    "where %s = ? " +
-                    "and %s.%s = %s.%s "
-            ,STOCK_TABLE, STOCK_ITEM_ID, ITEM_ID,ITEMS_IN_ORDERS_TABLE, DELIVERY_TABLE, ITEMS_IN_ORDERS_TABLE,
-                    ITEMS_IN_ORDERS_ORDER_ID, DELIVERY_TABLE, DELIVERY_ORDER_ID, STOCK_TABLE, STOCK_TABLE,
-                    STOCK_ITEM_ID, ITEMS_IN_ORDERS_TABLE, ITEMS_IN_ORDERS_ITEM_ID, DELIVERY_ID, STOCK_TABLE,
-                    STOCK_WAREHOUSE_ID, DELIVERY_TABLE, DELIVERY_WAREHOUSE_ID);
+            String sql = "select * from items_that_need_to_send_with_delivery where delivery_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, deliveryID);
             ResultSet rs = statement.executeQuery();
@@ -92,7 +69,6 @@ public class AddNewItemDeliveryController extends Controller implements Initiali
                 result.add(rs.getInt(ITEM_ID ) +"");
             }
             statement.close();
-            connection.close();
             return result;
         }catch (Exception exception){
             return null;
@@ -111,7 +87,6 @@ public class AddNewItemDeliveryController extends Controller implements Initiali
            resultSet.next();
            maxAmount = resultSet.getInt("amount");
            statement.close();
-           connection.close();
             return maxAmount;
         }catch (Exception exception){
             return 0;

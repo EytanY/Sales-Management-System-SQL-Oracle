@@ -27,7 +27,7 @@ public class ReportOrdersDateController extends Controller{
             statement.setDate(1, Date.valueOf(dateOrders.getValue()));
             ResultSet rs = statement.executeQuery();
             StringBuilder sb = new StringBuilder();
-            sb.append("Deliveries::\n");
+            sb.append("Deliveries:\n");
             while(rs.next()){
                 sb.append("Delivery ID:").append(rs.getInt(DELIVERY_ID));
                 sb.append( ",Type:").append(rs.getString(DELIVERY_TYPE)).append(" ").append(" Customer:").append(rs.getString(CUSTOMER_FIRST_NAME)).append(" ").append(rs.getString(CUSTOMER_LAST_NAME));

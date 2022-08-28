@@ -28,24 +28,18 @@ public class CustomersController extends Controller{
         String firstNameStr = firstName.getText();
         String lastNameStr = lastName.getText();
 
-        try{
-            String query = String.format("INSERT INTO %s (%s, %s) VALUES(?, ?)"
-            , CUSTOMER_TABLE , CUSTOMER_FIRST_NAME, CUSTOMER_LAST_NAME);
-            PreparedStatement statement = connection.prepareStatement(query);
+        try {
+            String sql = "{CALL ADD_CUSTOMER(?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(sql);
             statement.setString(1, firstNameStr);
             statement.setString(2, lastNameStr);
-            statement.executeUpdate();
-
-
-            String sql1 = String.format("SELECT max(%s) as %s from %s"
-            , CUSTOMER_ID,CUSTOMER_ID ,CUSTOMER_TABLE);
-            PreparedStatement statement1 = connection.prepareStatement(sql1);
-            ResultSet rs =  statement1.executeQuery();
-            rs.next();
-            resultLabel.setText("SUCCESS! New Customer ID:" + rs.getInt(CUSTOMER_ID));
+            statement.registerOutParameter(3, Types.INTEGER);
+            statement.execute();
+            resultLabel.setText("SUCCESS! New Customer ID:" + statement.getInt(3));
 
             statement.close();
-            statement1.close();
+        }catch (SQLException exception){
+            resultLabel.setText(exception.getMessage());
         }catch (Exception exception){
             resultLabel.setText("Error");
         }
@@ -58,6 +52,7 @@ public class CustomersController extends Controller{
 
         try{
             connection = new SQL().getConnection();
+
             String sql = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?"
             , CUSTOMER_TABLE, CUSTOMER_FIRST_NAME, CUSTOMER_LAST_NAME);
             PreparedStatement statement = connection.prepareStatement(sql);

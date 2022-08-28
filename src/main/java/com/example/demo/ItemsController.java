@@ -26,10 +26,10 @@ public class ItemsController extends Controller {
             statement.setString(2, itemDecTF.getText());
             statement.setFloat(3, Float.parseFloat(itemPriceTF.getText()));
             statement.executeUpdate();
-            resultLabel.setText("SUCCESSES");
+            resultLabel.setText("Item " + itemIDTF.getText() + " inserted successfully!");
             statement.close();
         }catch (Exception exception){
-            resultLabel.setText("NOT SUCCESSES- check the input(ID already used,price not a number...)");
+            resultLabel.setText("Error- check the input(ID already used,price not a number...)");
         }
     }
     public void onSearchItemButtonClick() {
