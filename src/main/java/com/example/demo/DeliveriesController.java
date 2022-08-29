@@ -4,9 +4,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class DeliveriesController extends Controller implements Initializable {
@@ -47,26 +47,21 @@ public class DeliveriesController extends Controller implements Initializable {
         try {
             int orderID = Integer.parseInt(ordersIDChoice.getValue());
             int warehouseID = Integer.parseInt(warehouseIDChoice.getValue());
-            String sql = String.format("INSERT INTO %s (%s, %s, %s) VALUES ( ? , ? , ?)",
-                    DELIVERY_TABLE, DELIVERY_ORDER_ID, DELIVERY_WAREHOUSE_ID, DELIVERY_TYPE);
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,orderID);
-            statement.setInt(2,warehouseID);
-            statement.setInt(3, DELIVERY_TYPES.indexOf(deliveryTypeCB.getValue()));
-            statement.executeUpdate();
-            statement.close();
-
-            String sql1 = String.format("SELECT max(%s) %s from %s"
-            , DELIVERY_ID, DELIVERY_ID, DELIVERY_TABLE);
-            PreparedStatement statement1 = connection.prepareStatement(sql1);
-            ResultSet rs =  statement1.executeQuery();
-            rs.next();
+            int type = deliveryTypeCB.getValue().equals("A") ? 0 : 1;
+            String sql = "{CALL ADD_DELIVERY(?, ?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(sql);
+            statement.setInt(1, orderID);
+            statement.setInt(2, warehouseID);
+            statement.setInt(3, type);
+            statement.registerOutParameter(4, Types.INTEGER);
+            statement.execute();
             Alert message = new Alert(Alert.AlertType.INFORMATION);
-            String messageStr = "SUCCESS! New Delivery ID:" + rs.getInt(DELIVERY_ID);
+            String messageStr = "SUCCESS! New Delivery ID:" + statement.getInt(4);
             message.setContentText(messageStr);
             message.show();
-            statement1.close();
             onReturnToMenuButtonClick();
+        }catch (SQLException sqlException){
+            resultLabel.setText(sqlException.getMessage());
         }catch (Exception exception){
             resultLabel.setText("Error!");
         }

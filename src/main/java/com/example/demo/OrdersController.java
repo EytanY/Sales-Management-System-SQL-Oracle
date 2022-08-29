@@ -9,6 +9,7 @@ import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -41,19 +42,13 @@ public class OrdersController extends Controller implements Initializable {
 
     public void onAddNewOrderButtonClick() {
         try{
-            connection = new SQL().getConnection();
-
-            String sql = String.format("INSERT INTO %s(%s) VALUES(?)", ORDER_TABLE, ORDER_CUSTOMER_ID);
-            PreparedStatement statement = connection.prepareStatement(sql);
+            String sql = "{CALL ADD_ORDER(?, ?)}";
+            CallableStatement statement = connection.prepareCall(sql);
             statement.setInt(1, Integer.parseInt(customersIDChoice.getValue()));
-            statement.executeUpdate();
-
-            String sql1 = String.format("SELECT max(%s) from %s", ORDER_ID, ORDER_TABLE);
-            PreparedStatement statement1 = connection.prepareStatement(sql1);
-            ResultSet rs =  statement1.executeQuery();
-            rs.next();
+            statement.registerOutParameter(2, Types.INTEGER);
+            statement.execute();
             Alert message = new Alert(Alert.AlertType.INFORMATION);
-            String messageStr = "SUCCESS! New Order ID:" + rs.getInt(String.format("max(%s)", ORDER_ID));
+            String messageStr = "SUCCESS! New Order ID:" + statement.getInt(2);
             message.setContentText(messageStr);
             message.show();
             onReturnToMenuButtonClick();
